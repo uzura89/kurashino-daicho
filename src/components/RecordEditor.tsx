@@ -15,6 +15,7 @@ const SPAN_CLASS: Record<FieldWidth, string> = {
   full: 'col-span-full',
 };
 
+
 /**
  * カテゴリ内の1アイテム（1レコード）のエディタ。
  * フィールドは2カラムのグリッドで横に並べ、高さを節約する。
@@ -93,9 +94,9 @@ export default function RecordEditor({
                     onChange={(e) => patchValue(f.key, { customLabel: e.target.value })}
                   />
                 ) : (
-                  <span className="truncate text-xs font-medium text-slate-700">
-                    {f.label}
-                    {f.required && <span className="ml-0.5 text-red-500">*</span>}
+                  <span className="flex min-w-0 items-center gap-1 text-xs font-medium text-slate-700">
+                    <span className="truncate">{f.label}</span>
+                    {f.required && <span className="text-red-500">*</span>}
                   </span>
                 )}
                 {f.isCustom && (
@@ -109,7 +110,25 @@ export default function RecordEditor({
                   </button>
                 )}
               </div>
-              {multiline ? (
+              {f.options ? (
+                <select
+                  className="input"
+                  value={fv.value}
+                  disabled={disabled}
+                  onChange={(e) => patchValue(f.key, { value: e.target.value })}
+                >
+                  <option value="">選択してください</option>
+                  {/* 既存の値が選択肢に無い場合（旧データ等）も表示できるよう補う */}
+                  {fv.value && !f.options.includes(fv.value) && (
+                    <option value={fv.value}>{fv.value}</option>
+                  )}
+                  {f.options.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              ) : multiline ? (
                 <textarea
                   className="input min-h-[2.5rem]"
                   rows={2}

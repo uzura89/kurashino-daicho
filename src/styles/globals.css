@@ -14,7 +14,7 @@ body {
   color: #1f2933;
   font-family:
     -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
-    "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    "Hiragino Sans", Meiryo, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 

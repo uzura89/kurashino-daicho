@@ -38,18 +38,26 @@ export default function Home() {
   return (
     <div className="space-y-6">
       <section className="card">
-        <h1 className="text-xl font-bold text-slate-800">資産・契約台帳メーカー</h1>
+        <h1 className="font-brand text-2xl font-bold tracking-wide text-slate-800">
+          もしも台帳メーカーとは
+        </h1>
+        <p className="mt-1 font-brand text-sm text-slate-500">
+          個人の資産・サブスク契約を一覧化して、もしもの備えに
+        </p>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           自分の<strong>資産・契約台帳</strong>
           （銀行・カード・サブスク・保険・年金・不動産・アカウントなどの一覧）を作って
-          <strong>印刷する</strong>ための小さなツールです。終活・相続の資産整理や、
+          <strong>印刷する</strong>
+          ための小さなツールです。終活・相続の資産整理や、
           サブスクの解約準備にも使えます。
           もしもの時に、家族が「どこに何があるか」をすぐ把握できるようにしておくことが目的です。
         </p>
         <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600">
           <li>
             <strong>データはこの端末のブラウザ内だけ</strong>
-            に保存され、サーバーや外部APIには送られません。ログイン不要。
+            に保存され、サーバーや外部APIには送られません。ログイン不要。 ただし
+            <strong>ブラウザの履歴・データを消すと内容も消えます</strong>。
+            確実に残すには<strong>CSVに書き出して保存</strong>してください。
           </li>
           <li>
             <strong>正本は「印刷した紙」</strong>
@@ -108,7 +116,7 @@ export default function Home() {
         <Link href="/manual" className="font-semibold underline">
           説明書
         </Link>
-        、認知症・相続・サブスク解約など台帳の外で知っておきたいことは{" "}
+        、相続・サブスク解約など台帳の外で知っておきたいことは{" "}
         <Link href="/guide" className="font-semibold underline">
           ガイド
         </Link>{" "}

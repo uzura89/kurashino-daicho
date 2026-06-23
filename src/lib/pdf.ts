@@ -58,7 +58,9 @@ export async function generatePdf(
 ): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
-  const font = await doc.embedFont(await loadFontBytes(), { subset: true });
+  // フォントは CFF アウトラインの OpenType（Noto Sans JP）。pdf-lib の subset 埋め込みは
+  // CFF/CJK で日本語グリフが欠落する不具合があるため、サブセットせず全体を埋め込む。
+  const font = await doc.embedFont(await loadFontBytes(), { subset: false });
 
   const contentWidth = A4.width - MARGIN * 2;
   let cur: Cursor = { page: doc.addPage([A4.width, A4.height]), y: A4.height - MARGIN };

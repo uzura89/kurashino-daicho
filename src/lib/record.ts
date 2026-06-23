@@ -8,6 +8,8 @@ export interface ResolvedField {
   isCustom: boolean;
   width: FieldWidth;
   required: boolean;
+  /** 選択式の場合の選択肢（なければ自由入力） */
+  options?: string[];
 }
 
 /**
@@ -22,6 +24,7 @@ export function resolveFields(record: LedgerRecord): ResolvedField[] {
     isCustom: false,
     width: f.width ?? 'md',
     required: !!f.required,
+    options: f.options,
   }));
   const custom: ResolvedField[] = Object.entries(record.values)
     .filter(([k]) => k.startsWith('custom:'))

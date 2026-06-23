@@ -1,57 +1,34 @@
-import { useEffect, useState } from 'react';
 import RecordEditor from './RecordEditor';
 import type { LedgerRecord, RecordTypeDef } from '@/lib/types';
 import { isCategoryComplete, isRecordEmpty } from '@/lib/record';
-
-// 折りたたみ状態の localStorage キー（UI設定なので下書きの dirty には含めない）
-const COLLAPSE_KEY = 'ledger.collapsed.';
 
 /**
  * 1カテゴリ（型）のフォーム。
  * - 複数アイテム（レコード）を縦に並べ、「アイテムを追加」で増やせる
  * - 「該当なし」トグルでフォーム全体を無効化（このカテゴリは入力不要扱い）
- * - 見出し行のトグルで最小化でき、最小化中はフォームを隠して件数などの要約だけ表示する
+ * - 最小化（開閉）状態は親が制御する（全展開／全最小化に対応するため）
  */
 export default function CategoryEditor({
   def,
   items,
   notApplicable,
+  collapsed,
   onChangeItem,
   onAddItem,
   onRemoveItem,
   onToggleNotApplicable,
+  onToggleCollapse,
 }: {
   def: RecordTypeDef;
   items: LedgerRecord[];
   notApplicable: boolean;
+  collapsed: boolean;
   onChangeItem: (updated: LedgerRecord) => void;
   onAddItem: () => void;
   onRemoveItem: (id: string) => void;
   onToggleNotApplicable: () => void;
+  onToggleCollapse: () => void;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
-
-  // 保存済みの折りたたみ状態を復元（SSRとのハイドレーション不整合を避けるためマウント後に読む）
-  useEffect(() => {
-    try {
-      if (localStorage.getItem(COLLAPSE_KEY + def.type) === '1') setCollapsed(true);
-    } catch {
-      /* localStorage 不可の環境では既定（展開）のまま */
-    }
-  }, [def.type]);
-
-  const toggleCollapsed = () => {
-    setCollapsed((v) => {
-      const next = !v;
-      try {
-        localStorage.setItem(COLLAPSE_KEY + def.type, next ? '1' : '0');
-      } catch {
-        /* 保存できなくても表示は切り替える */
-      }
-      return next;
-    });
-  };
-
   // 入力完了 = 該当なし or（入力のあるアイテムが必須項目を満たしている）
   const complete = isCategoryComplete(items, notApplicable);
   // 入力済みアイテム数（空のスロットは数えない）
@@ -64,7 +41,7 @@ export default function CategoryEditor({
       <div className="flex items-center justify-between gap-3 px-1">
         <button
           type="button"
-          onClick={toggleCollapsed}
+          onClick={onToggleCollapse}
           className="flex min-w-0 items-center gap-2 text-left"
           aria-expanded={!collapsed}
           title={collapsed ? '開く' : '最小化'}
@@ -100,6 +77,9 @@ export default function CategoryEditor({
 
       {!collapsed && (
         <div className="card space-y-2">
+          {def.description && (
+            <p className="text-xs leading-relaxed text-slate-500">{def.description}</p>
+          )}
           <div className="space-y-2">
             {items.map((rec, i) => (
               <RecordEditor

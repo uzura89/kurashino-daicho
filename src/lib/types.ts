@@ -14,6 +14,8 @@ export interface FieldDef {
   width?: FieldWidth;
   /** 必須項目か（赤い * 表示。入力完了判定はこれが入っているかで見る）。未指定は任意。 */
   required?: boolean;
+  /** 指定すると自由入力ではなく選択式（プルダウン）になる。 */
+  options?: string[];
 }
 
 export interface RecordTypeDef {
@@ -23,6 +25,8 @@ export interface RecordTypeDef {
   label: string;
   /** この型が持つフィールド集合 */
   fields: FieldDef[];
+  /** カテゴリ上部に出す補足・記入例（任意） */
+  description?: string;
   /** 自由メモ型のように任意フィールド追加を許すか */
   allowCustomFields?: boolean;
 }

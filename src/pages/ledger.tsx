@@ -1,28 +1,35 @@
-import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import CategoryEditor from '@/components/CategoryEditor';
-import { RECORD_TYPES } from '@/lib/schema';
-import { emptyRecord, isCategoryComplete, isRecordEmpty } from '@/lib/record';
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import CategoryEditor from "@/components/CategoryEditor";
+import { RECORD_TYPES } from "@/lib/schema";
+import { emptyRecord, isCategoryComplete, isRecordEmpty } from "@/lib/record";
 import {
   getAllRecords,
   putRecord,
   deleteRecord,
   getCategoryNotApplicable,
   setCategoryNotApplicable,
-} from '@/lib/db';
-import type { LedgerRecord } from '@/lib/types';
+} from "@/lib/db";
+import type { LedgerRecord } from "@/lib/types";
 
 type ItemsByType = Record<string, LedgerRecord[]>;
+
+// カテゴリの折りたたみ状態の localStorage キー接頭辞（UI設定。下書きの dirty には含めない）
+const COLLAPSE_PREFIX = 'ledger.collapsed.';
 
 export default function LedgerPage() {
   const [itemsByType, setItemsByType] = useState<ItemsByType>({});
   const [na, setNa] = useState<Record<string, boolean>>({});
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [loaded, setLoaded] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
-      const [recs, naMap] = await Promise.all([getAllRecords(), getCategoryNotApplicable()]);
+      const [recs, naMap] = await Promise.all([
+        getAllRecords(),
+        getCategoryNotApplicable(),
+      ]);
       const byType: ItemsByType = {};
       for (const t of RECORD_TYPES) byType[t.type] = [];
       for (const r of recs) (byType[r.type] ??= []).push(r);
@@ -38,10 +45,50 @@ export default function LedgerPage() {
     })();
   }, []);
 
+  // 折りたたみ状態を localStorage から復元（マウント後＝クライアントで読む）
+  useEffect(() => {
+    const map: Record<string, boolean> = {};
+    try {
+      for (const t of RECORD_TYPES) {
+        map[t.type] = localStorage.getItem(COLLAPSE_PREFIX + t.type) === '1';
+      }
+    } catch {
+      /* localStorage 不可なら全展開のまま */
+    }
+    setCollapsed(map);
+  }, []);
+
+  const persistCollapse = (type: string, value: boolean) => {
+    try {
+      localStorage.setItem(COLLAPSE_PREFIX + type, value ? '1' : '0');
+    } catch {
+      /* 保存できなくても表示は切り替える */
+    }
+  };
+
+  const toggleCollapse = (type: string) => {
+    setCollapsed((prev) => {
+      const next = !prev[type];
+      persistCollapse(type, next);
+      return { ...prev, [type]: next };
+    });
+  };
+
+  const setAllCollapsed = (value: boolean) => {
+    const map: Record<string, boolean> = {};
+    for (const t of RECORD_TYPES) {
+      map[t.type] = value;
+      persistCollapse(t.type, value);
+    }
+    setCollapsed(map);
+  };
+
   const changeItem = async (updated: LedgerRecord) => {
     setItemsByType((prev) => ({
       ...prev,
-      [updated.type]: (prev[updated.type] ?? []).map((r) => (r.id === updated.id ? updated : r)),
+      [updated.type]: (prev[updated.type] ?? []).map((r) =>
+        r.id === updated.id ? updated : r,
+      ),
     }));
     // 空アイテムは保存しない（書き出しを汚さない）。空になったら下書きから削除。
     if (isRecordEmpty(updated)) {
@@ -53,7 +100,10 @@ export default function LedgerPage() {
   };
 
   const addItem = (type: string) => {
-    setItemsByType((prev) => ({ ...prev, [type]: [...(prev[type] ?? []), emptyRecord(type)] }));
+    setItemsByType((prev) => ({
+      ...prev,
+      [type]: [...(prev[type] ?? []), emptyRecord(type)],
+    }));
   };
 
   const removeItem = async (type: string, id: string) => {
@@ -91,14 +141,21 @@ export default function LedgerPage() {
 
   const incompleteTypes = useMemo(
     () =>
-      RECORD_TYPES.filter((t) => !isCategoryComplete(itemsByType[t.type] ?? [], !!na[t.type])),
+      RECORD_TYPES.filter(
+        (t) => !isCategoryComplete(itemsByType[t.type] ?? [], !!na[t.type]),
+      ),
     [itemsByType, na],
   );
 
   const totalItems = useMemo(
     () =>
       RECORD_TYPES.reduce(
-        (n, t) => n + (na[t.type] ? 0 : (itemsByType[t.type] ?? []).filter((r) => !isRecordEmpty(r)).length),
+        (n, t) =>
+          n +
+          (na[t.type]
+            ? 0
+            : (itemsByType[t.type] ?? []).filter((r) => !isRecordEmpty(r))
+                .length),
         0,
       ),
     [itemsByType, na],
@@ -110,14 +167,15 @@ export default function LedgerPage() {
         <div>
           <h1 className="text-xl font-bold text-slate-800">台帳作成</h1>
           <p className="mt-1 text-sm text-slate-600">
-            各カテゴリの<span className="text-red-500">*</span>（必須）を入力するか「該当なし」を選んでください。
+            各カテゴリの<span className="text-red-500">*</span>
+            （必須）を入力するか「該当なし」を選んでください。
             必須以外の項目は空欄でも構いません。
             パスワード等の秘匿情報は台帳に保存しません（必要なら別途共有してください）。
             入力は自動的に下書き保存されます。
           </p>
         </div>
         <div className="text-right text-xs text-slate-400">
-          {savedAt ? '下書きに保存しました' : '　'}
+          {savedAt ? "下書きに保存しました" : "　"}
           <div className="mt-1">
             <Link href="/export" className="underline">
               書き出して保存（正本）→
@@ -128,22 +186,34 @@ export default function LedgerPage() {
 
       {loaded && incompleteTypes.length > 0 && (
         <div className="sticky top-2 z-10 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          <p className="font-semibold">未入力のカテゴリがあります（{incompleteTypes.length} 件）</p>
+          <p className="font-semibold">
+            未入力のカテゴリがあります（{incompleteTypes.length} 件）
+          </p>
           <p className="mt-1 text-xs">
-            各カテゴリの必須項目（<span className="text-red-500">*</span>）を入力するか、「該当なし」を選択してください：{' '}
-            {incompleteTypes.map((t) => t.label).join('、')}
+            各カテゴリの必須項目（<span className="text-red-500">*</span>
+            ）を入力するか、「該当なし」を選択してください：{" "}
+            {incompleteTypes.map((t) => t.label).join("、")}
           </p>
         </div>
       )}
 
       {loaded && incompleteTypes.length === 0 && (
         <div className="rounded-md border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
-          すべてのカテゴリが入力済み、または「該当なし」になっています。{' '}
+          すべてのカテゴリが入力済み、または「該当なし」になっています。{" "}
           <Link href="/export" className="font-semibold underline">
             書き出しへ
           </Link>
         </div>
       )}
+
+      <div className="flex justify-end gap-2">
+        <button type="button" className="btn-secondary text-xs" onClick={() => setAllCollapsed(false)}>
+          すべて展開
+        </button>
+        <button type="button" className="btn-secondary text-xs" onClick={() => setAllCollapsed(true)}>
+          すべて最小化
+        </button>
+      </div>
 
       <div className="space-y-4">
         {RECORD_TYPES.map((def) => (
@@ -152,22 +222,15 @@ export default function LedgerPage() {
             def={def}
             items={itemsByType[def.type] ?? []}
             notApplicable={!!na[def.type]}
+            collapsed={!!collapsed[def.type]}
             onChangeItem={changeItem}
             onAddItem={() => addItem(def.type)}
             onRemoveItem={(id) => removeItem(def.type, id)}
             onToggleNotApplicable={() => toggleNotApplicable(def.type)}
+            onToggleCollapse={() => toggleCollapse(def.type)}
           />
         ))}
       </div>
-
-      {totalItems > 0 && (
-        <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
-          入力内容はこの端末の下書きです。<strong>書き出して印刷・物理保管するまでは正本になりません。</strong>{' '}
-          <Link href="/export" className="font-semibold underline">
-            書き出しへ
-          </Link>
-        </div>
-      )}
     </div>
   );
 }

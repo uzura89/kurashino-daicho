@@ -5,12 +5,13 @@ import { getDirtyFlag, subscribeDirty } from "@/lib/dirtyStore";
 import { hydrateDirty } from "@/lib/db";
 
 const NAV = [
-  { href: "/", label: "はじめに" },
-  { href: "/import", label: "明細取込" },
-  { href: "/ledger", label: "台帳作成" },
-  { href: "/export", label: "書き出し" },
+  { href: "/", label: "①はじめに" },
+  { href: "/import", label: "②明細取込" },
+  { href: "/ledger", label: "③台帳作成" },
+  { href: "/export", label: "④書き出し" },
   { href: "/manual", label: "説明書" },
-  { href: "/guide", label: "ガイド" },
+  { href: "/guide", label: "基本情報" },
+  { href: "/settings", label: "設定" },
 ];
 
 function useDirty(): boolean {
@@ -50,8 +51,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-4xl px-4">
           <div className="flex items-center justify-between py-3">
-            <Link href="/" className="text-base font-bold text-slate-800">
-              資産・契約台帳メーカー
+            <Link href="/" className="flex items-baseline gap-2 text-slate-800">
+              <span className="font-brand text-lg font-bold tracking-wide">
+                もしも台帳メーカー
+              </span>
+              <span className="hidden font-brand text-xs text-slate-400 sm:inline">
+                資産・サブスク契約の一覧化
+              </span>
             </Link>
             <span className="text-xs text-slate-400">
               ログイン不要・データは端末内のみ
@@ -78,8 +84,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* §1-6 / §11: 正本は「印刷した紙＋物理保管」を常に明示 */}
       <div className="border-b border-amber-200 bg-amber-50">
         <div className="mx-auto max-w-4xl px-4 py-1.5 text-xs text-amber-800">
-          このアプリの保存は<strong>下書き</strong>です。正本は
-          <strong>「書き出して印刷した紙」＋「物理保管（金庫等）」</strong>。
+          このアプリの保存は<strong>下書き</strong>です。
+          <strong>ブラウザの履歴・データを消すと内容も消えます。</strong>
+          確実に残すには<strong>CSVに書き出して保存</strong>を。
           {dirty && (
             <span className="ml-2 rounded bg-amber-200 px-1.5 py-0.5 font-semibold text-amber-900">
               未書き出しの変更があります
