@@ -1,20 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   getAllRecords,
   wipeAll,
   clearDirty,
   getCategoryNotApplicable,
   replaceAllRecords,
-} from '@/lib/db';
-import { csvToRecords } from '@/lib/csv';
-import { readTextFileSmart } from '@/lib/download';
-import { RECORD_TYPES } from '@/lib/schema';
-import { isCategoryComplete } from '@/lib/record';
-import type { LedgerRecord } from '@/lib/types';
+} from "@/lib/db";
+import { csvToRecords } from "@/lib/csv";
+import { readTextFileSmart } from "@/lib/download";
+import { RECORD_TYPES } from "@/lib/schema";
+import { isCategoryComplete } from "@/lib/record";
+import type { LedgerRecord } from "@/lib/types";
 
 // CategoryEditor が使う折りたたみ状態の localStorage キー接頭辞
-const COLLAPSE_PREFIX = 'ledger.collapsed.';
+const COLLAPSE_PREFIX = "ledger.collapsed.";
 
 type Stats = { records: number; resolved: number; total: number };
 
@@ -26,7 +26,10 @@ export default function SettingsPage() {
 
   const reload = async () => {
     try {
-      const [recs, na] = await Promise.all([getAllRecords(), getCategoryNotApplicable()]);
+      const [recs, na] = await Promise.all([
+        getAllRecords(),
+        getCategoryNotApplicable(),
+      ]);
       const byType: Record<string, LedgerRecord[]> = {};
       for (const r of recs) (byType[r.type] ??= []).push(r);
       const total = RECORD_TYPES.length;
@@ -45,7 +48,9 @@ export default function SettingsPage() {
 
   const clearCollapseState = () => {
     try {
-      const keys = Object.keys(localStorage).filter((k) => k.startsWith(COLLAPSE_PREFIX));
+      const keys = Object.keys(localStorage).filter((k) =>
+        k.startsWith(COLLAPSE_PREFIX),
+      );
       keys.forEach((k) => localStorage.removeItem(k));
     } catch {
       /* localStorage 不可の環境では何もしない */
@@ -55,7 +60,7 @@ export default function SettingsPage() {
   const clearAll = async () => {
     if (
       !confirm(
-        'この端末に保存された下書き（台帳の全レコード・「該当なし」設定・表示状態）をすべて削除します。\n\n書き出したCSV/印刷物には影響しませんが、未書き出しの内容は復元できません。よろしいですか？',
+        "この端末に保存された下書き（台帳の全レコード・「該当なし」設定・表示状態）をすべて削除します。\n\n書き出したCSV/印刷物には影響しませんが、未書き出しの内容は復元できません。よろしいですか？",
       )
     ) {
       return;
@@ -67,7 +72,7 @@ export default function SettingsPage() {
       await clearDirty();
       clearCollapseState();
       await reload();
-      setMessage('下書きデータをすべて削除しました。');
+      setMessage("下書きデータをすべて削除しました。");
     } finally {
       setBusy(false);
     }
@@ -80,7 +85,9 @@ export default function SettingsPage() {
       const text = await readTextFileSmart(file);
       const parsed = csvToRecords(text);
       if (parsed.length === 0) {
-        setMessage('このCSVから台帳レコードを復元できませんでした。このアプリで書き出したCSVを指定してください。');
+        setMessage(
+          "このCSVから台帳レコードを復元できませんでした。このアプリで書き出したCSVを指定してください。",
+        );
         return;
       }
       if (
@@ -94,14 +101,20 @@ export default function SettingsPage() {
       await reload();
       setMessage(`${parsed.length} 件のレコードを読み戻しました。`);
     } catch (e) {
-      setMessage('読み込みに失敗しました: ' + (e instanceof Error ? e.message : String(e)));
+      setMessage(
+        "読み込みに失敗しました: " +
+          (e instanceof Error ? e.message : String(e)),
+      );
     } finally {
       setBusy(false);
-      if (fileRef.current) fileRef.current.value = '';
+      if (fileRef.current) fileRef.current.value = "";
     }
   };
 
-  const pct = stats && stats.total > 0 ? Math.round((stats.resolved / stats.total) * 100) : 0;
+  const pct =
+    stats && stats.total > 0
+      ? Math.round((stats.resolved / stats.total) * 100)
+      : 0;
 
   return (
     <div className="space-y-5">
@@ -124,8 +137,10 @@ export default function SettingsPage() {
           <div className="mb-1 flex items-baseline justify-between text-sm text-slate-600">
             <span>入力の進捗（カテゴリ）</span>
             <span className="font-semibold text-slate-800">
-              {stats ? `${stats.resolved} / ${stats.total}` : '—'}
-              <span className="ml-1 text-xs font-normal text-slate-500">（{pct}%）</span>
+              {stats ? `${stats.resolved} / ${stats.total}` : "—"}
+              <span className="ml-1 text-xs font-normal text-slate-500">
+                （{pct}%）
+              </span>
             </span>
           </div>
           <div
@@ -141,23 +156,27 @@ export default function SettingsPage() {
             />
           </div>
           <p className="mt-1 text-xs text-slate-500">
-            各カテゴリが「入力済み」または「該当なし」になると完了です。現在の下書き: {stats ? `${stats.records} レコード` : '—'}
+            各カテゴリが「入力済み」または「該当なし」になると完了です。現在の下書き:{" "}
+            {stats ? `${stats.records} レコード` : "—"}
           </p>
         </div>
         <p className="text-xs text-slate-500">
-          削除する前に、必要なら{' '}
+          削除する前に、必要なら{" "}
           <Link href="/export" className="font-semibold underline">
             書き出し
-          </Link>{' '}
+          </Link>{" "}
           でCSV/PDFをバックアップしてください（CSVは再編集の正本になります）。
         </p>
       </section>
 
       <section className="card space-y-3">
         <div>
-          <h2 className="font-semibold text-slate-800">CSVを読み戻す（再編集用・§9）</h2>
+          <h2 className="font-semibold text-slate-800">
+            CSVを読み戻す（再編集用）
+          </h2>
           <p className="mt-1 text-sm text-slate-600">
-            このアプリで書き出した<strong>CSV</strong>を読み込み、編集を再開できます。
+            このアプリで書き出した<strong>CSV</strong>
+            を読み込み、編集を再開できます。
             再編集の正本はCSVです（PDFは閲覧・共有用）。読み込むと現在の下書きは置き換わります。
           </p>
         </div>
@@ -178,15 +197,22 @@ export default function SettingsPage() {
         <h2 className="font-semibold text-red-700">下書きデータの全削除</h2>
         <p className="text-sm text-slate-600">
           この端末の下書き（台帳の全レコード・「該当なし」設定・表示状態）をすべて削除します。
-          <strong>書き出したCSV/印刷物には影響しません</strong>が、未書き出しの内容は元に戻せません。
+          <strong>書き出したCSV/印刷物には影響しません</strong>
+          が、未書き出しの内容は元に戻せません。
         </p>
-        <button type="button" className="btn-danger" onClick={clearAll} disabled={busy}>
-          {busy ? '削除中…' : '下書きデータをすべて削除'}
+        <button
+          type="button"
+          className="btn-danger"
+          onClick={clearAll}
+          disabled={busy}
+        >
+          {busy ? "削除中…" : "下書きデータをすべて削除"}
         </button>
       </section>
 
       <p className="text-xs text-slate-400">
-        ※ ブラウザのデータ消去・端末の故障・買い替えでも下書きは失われます。正本は「書き出して印刷した紙＋物理保管」です。
+        ※
+        ブラウザのデータ消去・端末の故障・買い替えでも下書きは失われます。正本は「書き出して印刷した紙＋物理保管」です。
       </p>
     </div>
   );

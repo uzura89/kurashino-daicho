@@ -48,7 +48,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-slate-200 bg-white print:hidden">
         <div className="mx-auto max-w-4xl px-4">
           <div className="flex items-center justify-between py-3">
             <Link href="/" className="flex items-baseline gap-2 text-slate-800">
@@ -56,7 +56,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 もしも台帳メーカー
               </span>
               <span className="hidden font-brand text-xs text-slate-400 sm:inline">
-                資産・サブスク契約の一覧化
+                資産・サブスク契約の一覧化ツール
               </span>
             </Link>
             <span className="text-xs text-slate-400">
@@ -82,7 +82,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* §1-6 / §11: 正本は「印刷した紙＋物理保管」を常に明示 */}
-      <div className="border-b border-amber-200 bg-amber-50">
+      <div className="border-b border-amber-200 bg-amber-50 print:hidden">
         <div className="mx-auto max-w-4xl px-4 py-1.5 text-xs text-amber-800">
           このアプリの保存は<strong>下書き</strong>です。
           <strong>ブラウザの履歴・データを消すと内容も消えます。</strong>

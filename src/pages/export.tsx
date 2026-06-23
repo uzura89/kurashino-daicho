@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getAllRecords, clearDirty } from "@/lib/db";
 import { recordsToCsv } from "@/lib/csv";
 import { downloadText, downloadBytes, stampFromDate } from "@/lib/download";
+import LedgerPreview from "@/components/LedgerPreview";
 import type { LedgerRecord } from "@/lib/types";
 
 export default function ExportPage() {
@@ -116,6 +117,18 @@ export default function ExportPage() {
           </button>
         </div>
       </section>
+
+      {!empty && (
+        <section className="space-y-3">
+          <div className="print:hidden">
+            <h2 className="text-lg font-bold text-slate-800">プレビュー</h2>
+            <p className="mt-1 text-sm text-slate-600">
+              書き出し（PDF/印刷）の内容を確認できます。値の入った項目だけを表示します。
+            </p>
+          </div>
+          <LedgerPreview records={records} />
+        </section>
+      )}
 
       <div className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-600">
         以前書き出したCSVから編集を再開するには{" "}

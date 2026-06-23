@@ -4,9 +4,30 @@ export default function Document() {
   return (
     <Html lang="ja">
       <Head>
-        <meta
-          name="description"
-          content="終活・相続の資産整理やサブスクの解約準備に。資産・契約（銀行・カード・サブスク・保険・年金・不動産など）の所在を一覧化し、無料で作成・印刷できるブラウザツール。ログイン不要・サーバー非保持、データは端末内のみ、正本は印刷した紙＋物理保管。"
+        {/* SEO/OGP メタは _app.tsx に集約（ページ毎の canonical/og:url のため） */}
+        <link rel="icon" href="/favicons/favicon.ico" sizes="any" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicons/favicon-16x16.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicons/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="/favicons/favicon-192x192.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/favicons/apple-touch-icon.png"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
