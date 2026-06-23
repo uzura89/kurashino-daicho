@@ -37,12 +37,12 @@ function FlowStep({
 export default function Home() {
   return (
     <div className="space-y-6">
+      <h1 className="font-brand text-2xl font-bold tracking-wide text-slate-800">
+        個人の資産・サブスク契約を一覧化して、もしもの備えに
+      </h1>
       <section className="card">
-        <h1 className="font-brand text-2xl font-bold tracking-wide text-slate-800">
+        <p className="mt-1 font-brand text-lg text-slate-800 font-bold">
           もしも台帳メーカーとは
-        </h1>
-        <p className="mt-1 font-brand text-sm text-slate-500">
-          個人の資産・サブスク契約を一覧化して、もしもの備えに
         </p>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           自分の<strong>資産・契約台帳</strong>
