@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RECORD_TYPES } from "@/lib/schema";
 
 function FlowStep({
   n,
@@ -109,6 +110,33 @@ export default function Home() {
             明細取込から始める →
           </Link>
         </div>
+      </section>
+
+      <section className="card space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold text-slate-800">
+            台帳に含まれる項目の一覧
+          </h2>
+          <p className="mt-1 text-sm text-slate-600">
+            次の{RECORD_TYPES.length}
+            カテゴリの「どこに何があるか」を一覧化できます。
+          </p>
+        </div>
+        <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+          {RECORD_TYPES.map((t) => (
+            <li key={t.type} className="flex gap-2">
+              <span aria-hidden className="mt-1 text-slate-400">
+                ▪
+              </span>
+              <div className="min-w-0">
+                <p className="font-semibold text-slate-800">{t.label}</p>
+                <p className="text-xs leading-relaxed text-slate-500">
+                  {t.fields.map((f) => f.label).join("・")}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <div className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-600">

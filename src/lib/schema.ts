@@ -35,7 +35,7 @@ export const RECORD_TYPES: RecordTypeDef[] = [
       fr("issuer", "カード会社", "md"),
       fr("last4", "下4桁", "xs"),
       f("debit_account", "引落し口座", "md"),
-      f("memo", "メモ（解約前に引落しを付け替える 等）", "full"),
+      f("memo", "メモ", "full"),
     ],
   },
   {
