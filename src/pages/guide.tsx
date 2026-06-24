@@ -45,10 +45,14 @@ export default function GuidePage() {
         </p>
       </header>
 
-      <Card title="① なぜ台帳が必要か（ないと家族はこう困る）">
+      <Card title="① なぜ台帳が必要か">
         <p>
-          台帳は<strong>「どこに何があるか」を家族に残す資産の地図</strong>
-          です。
+          台帳は<strong>「どこに何があるか」を示す暮らしの地図</strong>
+          です。まずは<strong>自分自身のため</strong>に役立ちます。引っ越しや入院、
+          固定費・サブスクの見直しなど、契約を一度に確認したい場面で「どこに何があるか」がすぐ分かります。
+        </p>
+        <p>
+          そして<strong>もしもの時には家族のため</strong>の地図になります。
           これがないと、いざという時に家族は次のような苦労を抱えがちです。
         </p>
         <ul className="list-disc space-y-1 pl-5">

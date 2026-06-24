@@ -1,5 +1,41 @@
 import Link from "next/link";
+import type { IconType } from "react-icons";
+import {
+  LuLandmark,
+  LuCreditCard,
+  LuTrendingUp,
+  LuShieldCheck,
+  LuHouse,
+  LuHandCoins,
+  LuPlug,
+  LuRepeat,
+  LuSmartphone,
+  LuBitcoin,
+  LuGlobe,
+  LuHeartPulse,
+  LuContact,
+  LuFileText,
+  LuNotebookPen,
+} from "react-icons/lu";
 import { RECORD_TYPES } from "@/lib/schema";
+
+const RECORD_TYPE_ICONS: Record<string, IconType> = {
+  bank_account: LuLandmark,
+  credit_card: LuCreditCard,
+  securities_account: LuTrendingUp,
+  insurance: LuShieldCheck,
+  real_estate: LuHouse,
+  loan_debt: LuHandCoins,
+  utility: LuPlug,
+  subscription: LuRepeat,
+  device_account: LuSmartphone,
+  digital_money: LuBitcoin,
+  digital_asset: LuGlobe,
+  medical_care: LuHeartPulse,
+  contact: LuContact,
+  important_docs: LuFileText,
+  free_note: LuNotebookPen,
+};
 
 function FlowStep({
   n,
@@ -41,10 +77,10 @@ export default function Home() {
       <h1 className="font-brand text-2xl font-bold tracking-wide text-slate-800">
         銀行、保険、カード、サブスク。
         <br />
-        自分だけが把握している契約を一覧化して印刷。
+        暮らしに関わる情報をひとまとめにして印刷。
       </h1>
       <p className="-mt-2 text-sm leading-relaxed text-slate-600">
-        引っ越しにも、入院にも、もしもの時にも。暮らしの契約を、家族が分かる形に。
+        引っ越しにも、入院にも、もしもの時にも。暮らしの契約を、自分や家族が分かる形に。
       </p>
       <section className="card">
         <p className="mt-1 font-brand text-lg text-slate-800 font-bold">
@@ -127,19 +163,23 @@ export default function Home() {
           </p>
         </div>
         <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
-          {RECORD_TYPES.map((t) => (
-            <li key={t.type} className="flex gap-2">
-              <span aria-hidden className="mt-1 text-slate-400">
-                ▪
-              </span>
-              <div className="min-w-0">
-                <p className="font-semibold text-slate-800">{t.label}</p>
-                <p className="text-xs leading-relaxed text-slate-500">
-                  {t.fields.map((f) => f.label).join("・")}
-                </p>
-              </div>
-            </li>
-          ))}
+          {RECORD_TYPES.map((t) => {
+            const Icon = RECORD_TYPE_ICONS[t.type] ?? LuFileText;
+            return (
+              <li key={t.type} className="flex gap-2">
+                <Icon
+                  aria-hidden
+                  className="mt-0.5 h-5 w-5 shrink-0 text-slate-400"
+                />
+                <div className="min-w-0">
+                  <p className="font-semibold text-slate-800">{t.label}</p>
+                  <p className="text-xs leading-relaxed text-slate-500">
+                    {t.fields.map((f) => f.label).join("・")}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
@@ -150,7 +190,7 @@ export default function Home() {
         </Link>
         、相続・サブスク解約など台帳の外で知っておきたいことは{" "}
         <Link href="/guide" className="font-semibold underline">
-          ガイド
+          基本情報
         </Link>{" "}
         にまとめています。
       </div>
