@@ -1,66 +1,12 @@
 import { useMemo } from "react";
-import { RECORD_TYPES, getTypeDef } from "@/lib/schema";
-import { resolveFields } from "@/lib/record";
+import { buildLedgerView, rowEntries } from "@/lib/ledgerView";
 import type { LedgerRecord } from "@/lib/types";
 
 const DOC_TITLE = "資産・契約台帳";
 
-interface RenderField {
-  label: string;
-  value: string;
-}
-
-interface RenderRecord {
-  id: string;
-  headline: string;
-  fields: RenderField[];
-}
-
-interface RenderSection {
-  type: string;
-  label: string;
-  records: RenderRecord[];
-}
-
-/** PDF出力（lib/pdf.ts）と同じロジックで、値のあるフィールドだけを型ごとにまとめる。 */
-function buildSections(records: LedgerRecord[]): RenderSection[] {
-  const typeOrder = RECORD_TYPES.map((t) => t.type);
-  const sorted = [...records].sort(
-    (a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type),
-  );
-
-  const sections: RenderSection[] = [];
-  let current: RenderSection | null = null;
-
-  for (const rec of sorted) {
-    const fields = resolveFields(rec)
-      .filter((f) => (rec.values[f.key]?.value?.trim() ?? "") !== "")
-      .map((f) => ({
-        label: f.label,
-        value: rec.values[f.key]?.value?.trim() ?? "",
-      }));
-    if (fields.length === 0) continue;
-
-    if (!current || current.type !== rec.type) {
-      current = {
-        type: rec.type,
-        label: getTypeDef(rec.type)?.label ?? rec.type,
-        records: [],
-      };
-      sections.push(current);
-    }
-    current.records.push({
-      id: rec.id,
-      headline: fields[0].value || "（未入力）",
-      fields,
-    });
-  }
-  return sections;
-}
-
-/** 書き出し内容（PDF/印刷）のプレビューを表示する。値の入った項目だけを出す。 */
+/** 書き出し内容（PDF/印刷）のプレビュー。カテゴリ別テーブル。値の入った項目だけを出す。 */
 export default function LedgerPreview({ records }: { records: LedgerRecord[] }) {
-  const sections = useMemo(() => buildSections(records), [records]);
+  const sections = useMemo(() => buildLedgerView(records), [records]);
 
   if (sections.length === 0) return null;
 
@@ -73,30 +19,44 @@ export default function LedgerPreview({ records }: { records: LedgerRecord[] }) 
         台帳（地図情報）— どこに何があるかの一覧。パスワード等の秘匿情報は含みません。
       </p>
 
-      <div className="mt-6 space-y-8">
+      <div className="mt-6 space-y-7">
         {sections.map((section) => (
-          <section key={section.type}>
-            <h3 className="border-b border-slate-300 pb-1 text-base font-bold text-slate-800">
+          <section key={section.type} className="break-inside-avoid">
+            <h3 className="border-b-2 border-slate-300 pb-1 text-base font-bold text-slate-800">
               {section.label}
             </h3>
-            <div className="mt-3 space-y-5">
-              {section.records.map((rec) => (
-                <div key={rec.id} className="break-inside-avoid">
-                  <p className="font-semibold text-slate-900">
-                    ■ {rec.headline}
-                  </p>
-                  <dl className="mt-1 space-y-1.5 pl-4">
-                    {rec.fields.map((f, i) => (
-                      <div key={i}>
-                        <dt className="text-xs text-slate-500">{f.label}</dt>
-                        <dd className="whitespace-pre-wrap text-sm text-slate-800">
-                          {f.value || "—"}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              ))}
+
+            <div className="mt-2 space-y-3">
+              {section.rows.map((row) => {
+                const entries = rowEntries(section, row);
+                if (entries.length === 0) return null;
+                return (
+                  <table
+                    key={row.id}
+                    className="w-full border-collapse border border-slate-200 text-sm break-inside-avoid"
+                  >
+                    <tbody>
+                      {entries.map((e, i) => (
+                        <tr
+                          key={i}
+                          className="border-b border-slate-100 align-top last:border-0"
+                        >
+                          <th className="w-1/3 whitespace-pre-wrap bg-slate-50 px-3 py-1.5 text-left text-xs font-medium text-slate-500">
+                            {e.label}
+                          </th>
+                          <td
+                            className={`whitespace-pre-wrap px-3 py-1.5 text-slate-800 ${
+                              e.small ? "text-xs leading-relaxed" : "text-sm"
+                            }`}
+                          >
+                            {e.value}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                );
+              })}
             </div>
           </section>
         ))}

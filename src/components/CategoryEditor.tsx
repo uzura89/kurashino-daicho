@@ -93,14 +93,16 @@ export default function CategoryEditor({
             ))}
           </div>
 
-          <button
-            type="button"
-            className="btn-secondary text-xs"
-            onClick={onAddItem}
-            disabled={notApplicable}
-          >
-            ＋ アイテムを追加
-          </button>
+          {!def.singleEntry && (
+            <button
+              type="button"
+              className="btn-secondary text-xs"
+              onClick={onAddItem}
+              disabled={notApplicable}
+            >
+              ＋ アイテムを追加
+            </button>
+          )}
         </div>
       )}
     </section>

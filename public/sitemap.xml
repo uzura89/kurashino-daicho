@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://moshimo-daicho-maker.vercel.app/</loc>
+    <loc>https://kurashinodaicho.com/</loc>
     <lastmod>2026-06-23</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://moshimo-daicho-maker.vercel.app/import/</loc>
+    <loc>https://kurashinodaicho.com/import/</loc>
     <lastmod>2026-06-23</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://moshimo-daicho-maker.vercel.app/ledger/</loc>
+    <loc>https://kurashinodaicho.com/ledger/</loc>
     <lastmod>2026-06-23</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://moshimo-daicho-maker.vercel.app/export/</loc>
+    <loc>https://kurashinodaicho.com/export/</loc>
     <lastmod>2026-06-23</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://moshimo-daicho-maker.vercel.app/manual/</loc>
+    <loc>https://kurashinodaicho.com/manual/</loc>
     <lastmod>2026-06-23</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://moshimo-daicho-maker.vercel.app/guide/</loc>
+    <loc>https://kurashinodaicho.com/guide/</loc>
     <lastmod>2026-06-23</lastmod>
     <priority>0.5</priority>
   </url>

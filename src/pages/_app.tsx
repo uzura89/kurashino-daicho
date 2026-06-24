@@ -4,12 +4,12 @@ import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import "@/styles/globals.css";
 
-const SITE_URL = "https://moshimo-daicho-maker.vercel.app";
-const SITE_NAME = "もしも台帳メーカー";
+const SITE_URL = "https://kurashinodaicho.com";
+const SITE_NAME = "暮らしの台帳";
 const TITLE =
-  "もしも台帳メーカー｜個人の資産とサブスクを一覧化するツール。終活・相続に。";
+  "暮らしの台帳｜銀行・保険・カード・サブスクの契約を家族が分かる一覧に";
 const DESCRIPTION =
-  "終活・相続の資産整理やサブスクの解約準備に。資産・契約（銀行・カード・サブスク・保険・年金・不動産など）の所在を一覧化し、無料で作成・印刷できるブラウザツール。ログイン不要・サーバー非保持、データは端末内のみ、正本は印刷した紙＋物理保管。";
+  "銀行・カード・サブスク・保険など「自分にしか分からない契約」を一覧化して印刷。引っ越し・入院・もしもの時に、家族がすぐ把握できます。日々の固定費・サブスクの見直しにも。エンディングノートの資産・契約パートを、安全に・最新の状態で残せます。ログイン不要・サーバー非保持、データは端末内のみ、正本は印刷した紙＋物理保管。";
 const OG_IMAGE = `${SITE_URL}/ogp.png`;
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -40,7 +40,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta property="og:image:height" content="630" />
         <meta
           property="og:image:alt"
-          content="もしも台帳メーカー｜資産・サブスク契約の一覧化ツール"
+          content="暮らしの台帳｜銀行・保険・カード・サブスクの契約一覧ツール"
         />
         <meta property="og:locale" content="ja_JP" />
 

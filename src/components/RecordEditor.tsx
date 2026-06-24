@@ -65,17 +65,19 @@ export default function RecordEditor({
 
   return (
     <div className={`rounded-md border border-slate-200 p-3 ${disabled ? 'opacity-50' : ''}`}>
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-xs font-semibold text-slate-400">アイテム {index + 1}</span>
-        <button
-          type="button"
-          className="text-xs text-slate-400 hover:text-red-500 disabled:opacity-50"
-          onClick={onDelete}
-          disabled={disabled}
-        >
-          削除
-        </button>
-      </div>
+      {!def?.singleEntry && (
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-xs font-semibold text-slate-400">アイテム {index + 1}</span>
+          <button
+            type="button"
+            className="text-xs text-slate-400 hover:text-red-500 disabled:opacity-50"
+            onClick={onDelete}
+            disabled={disabled}
+          >
+            削除
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-x-3 gap-y-2 sm:grid-cols-12">
         {fields.map((f) => {

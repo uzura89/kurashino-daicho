@@ -39,19 +39,23 @@ export default function Home() {
   return (
     <div className="space-y-6">
       <h1 className="font-brand text-2xl font-bold tracking-wide text-slate-800">
-        個人の資産・サブスク契約を一覧化して、もしもの備えに
+        銀行、保険、カード、サブスク。
+        <br />
+        自分だけが把握している契約を一覧化して印刷。
       </h1>
+      <p className="-mt-2 text-sm leading-relaxed text-slate-600">
+        引っ越しにも、入院にも、もしもの時にも。暮らしの契約を、家族が分かる形に。
+      </p>
       <section className="card">
         <p className="mt-1 font-brand text-lg text-slate-800 font-bold">
-          もしも台帳メーカーとは
+          暮らしの台帳とは
         </p>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
-          自分の<strong>資産・契約台帳</strong>
-          （銀行・カード・サブスク・保険・年金・不動産・アカウントなどの一覧）を作って
-          <strong>印刷する</strong>
-          ための小さなツールです。終活・相続の資産整理や、
-          サブスクの解約準備にも使えます。
-          もしもの時に、家族が「どこに何があるか」をすぐ把握できるようにしておくことが目的です。
+          自分や家族の<strong>契約・資産</strong>
+          （銀行・カード・サブスク・保険・年金・不動産・アカウントなど）を一覧にまとめ、
+          <strong>印刷して残しておく</strong>ための小さなツールです。
+          引っ越しや入院、もしもの時など、自分以外の誰かが手続きする場面でも、
+          家族が必要な情報をすぐ確認できます。日々の固定費やサブスクの見直しにも役立ちます。
         </p>
         <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600">
           <li>
@@ -61,7 +65,7 @@ export default function Home() {
             確実に残すには<strong>CSVに書き出して保存</strong>してください。
           </li>
           <li>
-            <strong>正本は「印刷した紙」</strong>
+            <strong>正本は「印刷した紙（PDF）」</strong>
             です。アプリの保存は下書きにすぎません。書き出して印刷・保管して完成です。
           </li>
           <li>

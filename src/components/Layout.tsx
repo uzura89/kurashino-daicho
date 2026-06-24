@@ -53,10 +53,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center justify-between py-3">
             <Link href="/" className="flex items-baseline gap-2 text-slate-800">
               <span className="font-brand text-lg font-bold tracking-wide">
-                もしも台帳メーカー
+                暮らしの台帳
               </span>
               <span className="hidden font-brand text-xs text-slate-400 sm:inline">
-                資産・サブスク契約の一覧化ツール
+                銀行・保険・カード・サブスクを一覧化
               </span>
             </Link>
             <span className="text-xs text-slate-400">

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://moshimo-daicho-maker.vercel.app/sitemap.xml
+Sitemap: https://kurashinodaicho.com/sitemap.xml

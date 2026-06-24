@@ -29,6 +29,8 @@ export interface RecordTypeDef {
   description?: string;
   /** 自由メモ型のように任意フィールド追加を許すか */
   allowCustomFields?: boolean;
+  /** アイテムを複数持たず、1件の自由記載だけにするか（重要書類など） */
+  singleEntry?: boolean;
 }
 
 export interface FieldValue {
