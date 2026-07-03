@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { getAllRecords, clearDirty } from "@/lib/db";
 import { recordsToCsv } from "@/lib/csv";
 import { downloadText, downloadBytes, stampFromDate } from "@/lib/download";
@@ -29,6 +30,7 @@ export default function ExportPage() {
     try {
       const csv = recordsToCsv(records);
       downloadText(`shukatsu_${stamp()}.csv`, csv);
+      track("export_csv", { records: records.length });
       await clearDirty();
       setMessage(
         "CSVを書き出しました。再編集用の正本です。印刷物と一緒に物理保管してください。",
@@ -46,6 +48,7 @@ export default function ExportPage() {
       const { generatePdf } = await import("@/lib/pdf");
       const bytes = await generatePdf(records, { title: "資産・契約台帳" });
       downloadBytes(`shukatsu_${stamp()}.pdf`, bytes, "application/pdf");
+      track("export_pdf", { records: records.length });
       await clearDirty();
       setMessage("PDFを書き出しました。");
     } catch (e) {

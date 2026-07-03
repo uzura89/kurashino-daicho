@@ -19,6 +19,7 @@
 ## 計測・外部通信について
 
 - 公開サイトではアクセス解析に [Vercel Analytics](https://vercel.com/docs/analytics) を使用しています。収集されるのはページビュー等の匿名の利用統計のみで、台帳の内容・取り込んだ明細・入力データが送信されることはありません（これらはブラウザの IndexedDB から外に出ません）
+- 利用状況の把握のため、PDF書き出し（`export_pdf`）と CSV書き出し（`export_csv`）の実行回数をカスタムイベントとして計測しています。送信されるのはイベント名とレコード件数のみで、台帳の中身は含まれません
 - Web フォント（Google Fonts の BIZ UDPMincho）を CDN から読み込みます
 - 上記以外に外部への通信はありません。セルフホストする場合は `src/pages/_app.tsx` の `<Analytics />` を外せば Vercel Analytics も無効になります
 
