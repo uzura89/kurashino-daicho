@@ -21,6 +21,9 @@ const CELL_LH = CELL_SIZE + 3; // 行高
 const SM_SIZE = 8; // 長文（自由記載）の値の文字サイズ
 const SM_LH = SM_SIZE + 2.5;
 
+const MEMO_LINES = 4; // カテゴリ末尾の自由記入欄の罫線本数
+const MEMO_LH = 18; // 記入欄の行間（手書き用に広め）
+
 let cachedFontBytes: ArrayBuffer | null = null;
 
 async function loadFontBytes(): Promise<ArrayBuffer> {
@@ -197,6 +200,40 @@ export async function generatePdf(
     cur.y = yy - 8;
   };
 
+  // カテゴリ末尾の自由記入欄（手書き用の空白＋罫線）。印刷して書き込む前提。
+  const drawMemo = () => {
+    const boxH = MEMO_LINES * MEMO_LH;
+    ensure(boxH + CELL_SIZE + 12);
+    cur.y -= 4;
+    cur.page.drawText("メモ", {
+      x: MARGIN,
+      y: cur.y - CELL_SIZE,
+      size: CELL_SIZE,
+      font,
+      color: COLOR_MUTED,
+    });
+    cur.y -= CELL_SIZE + 4;
+    const top = cur.y;
+    for (let i = 1; i <= MEMO_LINES; i++) {
+      const ly = top - i * MEMO_LH;
+      cur.page.drawLine({
+        start: { x: MARGIN + 8, y: ly },
+        end: { x: MARGIN + contentWidth - 8, y: ly },
+        thickness: 0.3,
+        color: COLOR_RULE,
+      });
+    }
+    cur.page.drawRectangle({
+      x: MARGIN,
+      y: top - boxH,
+      width: contentWidth,
+      height: boxH,
+      borderColor: COLOR_RULE,
+      borderWidth: 0.6,
+    });
+    cur.y = top - boxH - 8;
+  };
+
   let printedAny = false;
   for (const section of sections) {
     if (section.rows.length === 0) continue;
@@ -218,6 +255,9 @@ export async function generatePdf(
     for (const row of section.rows) {
       drawCardItem(rowEntries(section, row));
     }
+
+    // カテゴリごとの自由記入欄
+    drawMemo();
   }
 
   if (!printedAny) {

@@ -58,6 +58,12 @@ export default function LedgerPreview({ records }: { records: LedgerRecord[] }) 
                 );
               })}
             </div>
+
+            {/* カテゴリごとの自由記入欄（印刷して書き込む用） */}
+            <div className="mt-3 break-inside-avoid">
+              <p className="text-xs font-medium text-slate-500">メモ</p>
+              <div className="mt-1 h-[72px] rounded border border-slate-200 bg-[repeating-linear-gradient(transparent,transparent_17px,#e2e8f0_18px)]" />
+            </div>
           </section>
         ))}
       </div>
