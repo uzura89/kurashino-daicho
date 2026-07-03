@@ -13,6 +13,13 @@ const DESCRIPTION =
   "銀行・カード・サブスク・保険など暮らしに関わる契約をひとまとめに一覧化して印刷。引っ越し・入院・もしもの時に、自分や家族がすぐ把握できます。日々の固定費・サブスクの見直しにも。エンディングノートの資産・契約パートを、安全に・最新の状態で残せます。ログイン不要・サーバー非保持、データは端末内のみ、正本は印刷した紙＋物理保管。";
 const OG_IMAGE = `${SITE_URL}/ogp.png`;
 
+/** ページの getStaticProps から pageProps.seo で渡すと、既定のメタ情報を上書きできる */
+export type PageSeo = {
+  title?: string;
+  description?: string;
+  ogType?: "website" | "article";
+};
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   // trailingSlash: true で書き出されるので末尾スラッシュに正規化
@@ -20,21 +27,26 @@ export default function App({ Component, pageProps }: AppProps) {
   const canonical =
     SITE_URL + (path === "/" ? "/" : path.replace(/\/+$/, "") + "/");
 
+  const seo = (pageProps as { seo?: PageSeo }).seo;
+  const title = seo?.title ? `${seo.title}｜${SITE_NAME}` : TITLE;
+  const description = seo?.description ?? DESCRIPTION;
+  const ogType = seo?.ogType ?? "website";
+
   return (
     <>
       <Head>
-        <title>{TITLE}</title>
-        <meta name="description" content={DESCRIPTION} />
+        <title>{title}</title>
+        <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="robots" content="index, follow" />
         <meta name="theme-color" content="#1f2933" />
         <link rel="canonical" href={canonical} />
 
         {/* Open Graph */}
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType} />
         <meta property="og:site_name" content={SITE_NAME} />
-        <meta property="og:title" content={TITLE} />
-        <meta property="og:description" content={DESCRIPTION} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
         <meta property="og:url" content={canonical} />
         <meta property="og:image" content={OG_IMAGE} />
         <meta property="og:image:width" content="1200" />
@@ -47,8 +59,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={TITLE} />
-        <meta name="twitter:description" content={DESCRIPTION} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={OG_IMAGE} />
       </Head>
       <Layout>

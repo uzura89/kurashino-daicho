@@ -109,25 +109,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="mx-auto flex max-w-6xl gap-8 px-4 py-6">
-        {/* PC: メインペイン左のサイドバーナビ */}
-        <aside className="hidden w-44 shrink-0 lg:block print:hidden">
-          <nav className="sticky top-6 flex flex-col gap-1 text-base">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`py-2 ${
-                  isActive(item.href)
-                    ? // 左の3pxボーダー分を padding で相殺して非アクティブと文字位置を揃える
-                      "rounded-sm border-l-[3px] border-[#434343] bg-white pl-[9px] pr-3 font-bold text-ink"
-                    : "rounded-md px-3 text-slate-600 hover:bg-slate-100"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </aside>
+        {/* PC: メインペイン左のサイドバーナビ（記事詳細ページは記事側で目次を出すため非表示） */}
+        {router.pathname !== "/articles/[slug]" && (
+          <aside className="hidden w-44 shrink-0 lg:block print:hidden">
+            <nav className="sticky top-6 flex flex-col gap-1 text-base">
+              {NAV.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`py-2 ${
+                    isActive(item.href)
+                      ? // 左の3pxボーダー分を padding で相殺して非アクティブと文字位置を揃える
+                        "rounded-sm border-l-[3px] border-[#434343] bg-white pl-[9px] pr-3 font-bold text-ink"
+                      : "rounded-md px-3 text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </aside>
+        )}
         <main className="min-w-0 flex-1">{children}</main>
       </div>
     </div>

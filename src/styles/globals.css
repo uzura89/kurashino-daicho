@@ -75,4 +75,58 @@ a {
   .badge {
     @apply inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium;
   }
+
+  /* ブログ記事本文（markdown を marked で変換したHTML）用の組版 */
+  .article-body {
+    @apply text-[15px] leading-loose text-slate-700;
+  }
+  .article-body h2 {
+    @apply mb-3 mt-8 scroll-mt-6 border-b border-slate-300/70 pb-2 font-brand text-xl font-normal tracking-wider text-ink;
+    -webkit-text-stroke: 0.35px currentColor;
+  }
+  .article-body h3 {
+    @apply mb-2 mt-6 scroll-mt-6 text-base font-bold text-ink;
+  }
+  .article-body p {
+    @apply my-3;
+  }
+  .article-body ul,
+  .article-body ol {
+    @apply my-3 space-y-1 pl-6;
+  }
+  .article-body ul {
+    @apply list-disc;
+  }
+  .article-body ol {
+    @apply list-decimal;
+  }
+  .article-body a {
+    @apply text-ink underline decoration-slate-400 underline-offset-2 hover:decoration-ink;
+  }
+  .article-body strong {
+    @apply font-bold text-ink;
+  }
+  .article-body blockquote {
+    @apply my-4 border-l-2 border-slate-300 pl-4 text-slate-600;
+  }
+  .article-body table {
+    @apply my-4 w-full border-collapse text-sm;
+  }
+  .article-body th,
+  .article-body td {
+    @apply border border-slate-200 px-3 py-2 text-left align-top;
+  }
+  .article-body th {
+    @apply bg-slate-50 font-medium text-ink;
+  }
+  .article-body hr {
+    @apply my-8 border-slate-200;
+  }
+  /* GFMタスクリスト（- [ ]）: ビュレットとチェックボックスの二重表示を防ぐ */
+  .article-body li:has(> input[type="checkbox"]) {
+    @apply list-none;
+  }
+  .article-body input[type="checkbox"] {
+    @apply mr-1.5 align-middle accent-ink;
+  }
 }

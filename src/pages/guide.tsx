@@ -17,6 +17,28 @@ function Card({
   );
 }
 
+function RelatedArticles({
+  links,
+}: {
+  links: { href: string; label: string }[];
+}) {
+  return (
+    <div className="space-y-1 border-t border-slate-200/70 pt-2.5 text-sm">
+      {links.map((l) => (
+        <p key={l.href}>
+          <span className="text-slate-400">▶ 関連記事：</span>
+          <Link
+            href={l.href}
+            className="text-ink underline decoration-slate-400 underline-offset-2 hover:decoration-ink"
+          >
+            {l.label}
+          </Link>
+        </p>
+      ))}
+    </div>
+  );
+}
+
 function Term({ name, children }: { name: string; children: React.ReactNode }) {
   return (
     <div>
@@ -75,6 +97,18 @@ export default function GuidePage() {
         <p>
           元気なうちに作っておけば、家族の手続き負担と取りこぼしを減らせます。
         </p>
+        <RelatedArticles
+          links={[
+            {
+              href: "/articles/shukatsu-nanikara/",
+              label: "終活は何から始める？やることリスト12選",
+            },
+            {
+              href: "/articles/zaisan-mokuroku/",
+              label: "財産目録とは？書き方・作り方を記載例つきで解説",
+            },
+          ]}
+        />
       </Card>
       <Card title="② 台帳がカバーしない「秘匿情報」（最重要の鍵）">
         <p>
@@ -113,6 +147,14 @@ export default function GuidePage() {
           誰に何を遺すかを定める、<strong>法的効力を持つ</strong>
           文書。形式不備で無効になることがあるため、専門家への相談が安心です。
         </Term>
+        <RelatedArticles
+          links={[
+            {
+              href: "/articles/ending-note-kakikata/",
+              label: "エンディングノートの書き方｜項目一覧と書き進めるコツ",
+            },
+          ]}
+        />
       </Card>
       <Card title="④ 認知症に備える（判断能力が低下する前に）">
         <p>
@@ -133,6 +175,14 @@ export default function GuidePage() {
         <p className="text-xs text-slate-500">
           適切な方法は資産構成・家族関係で変わります。専門家や銀行に相談してください。
         </p>
+        <RelatedArticles
+          links={[
+            {
+              href: "/articles/ohitorisama-shukatsu/",
+              label: "おひとりさまの終活｜やることリストと「頼る先」の作り方",
+            },
+          ]}
+        />
       </Card>
       <Card title="⑤ 亡くなった後のサブスク・契約の解約">
         <p>
@@ -176,6 +226,14 @@ export default function GuidePage() {
         <p className="text-xs text-slate-500">
           カードを止めても契約は残る場合があります。可能なら正式な解約も進めてください。
         </p>
+        <RelatedArticles
+          links={[
+            {
+              href: "/articles/subscription-ichiran/",
+              label: "サブスク一覧の作り方｜使ってないサブスクを洗い出す手順",
+            },
+          ]}
+        />
       </Card>
       <Card title="⑥ アカウントを生前に整理・引き継ぐ（各サービスの公式機能）">
         <p>
@@ -204,6 +262,15 @@ export default function GuidePage() {
           台帳に<strong>利用サービス</strong>
           を記しておくと、家族が手続きにたどり着けます。
         </p>
+        <RelatedArticles
+          links={[
+            {
+              href: "/articles/digital-shukatsu/",
+              label:
+                "デジタル終活とは？スマホ・アカウント・デジタル遺品の整理方法",
+            },
+          ]}
+        />
       </Card>
 
       <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
