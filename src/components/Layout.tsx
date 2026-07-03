@@ -56,7 +56,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 暮らしの台帳
               </span>
               <span className="hidden font-brand text-xs text-slate-400 sm:inline">
-                銀行・保険・カード・サブスクを一覧化
+                暮らしの契約を、ひとつの台帳に
               </span>
             </Link>
             <span className="text-xs text-slate-400">

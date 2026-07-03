@@ -77,7 +77,7 @@ export default function Home() {
       <h1 className="font-brand text-2xl font-bold tracking-wide text-slate-800">
         銀行、保険、カード、サブスク。
         <br />
-        暮らしに関わる情報をひとまとめにして印刷。
+        散らかりがちな契約情報を、ひとつの台帳に。
       </h1>
       <p className="-mt-2 text-sm leading-relaxed text-slate-600">
         引っ越しにも、入院にも、もしもの時にも。暮らしの契約を、自分や家族が分かる形に。
