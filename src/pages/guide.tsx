@@ -88,7 +88,8 @@ export default function GuidePage() {
         </ul>
         <p>
           これらを共有しておきたい場合は、別紙や封筒に書き、金庫・貸金庫など安全な場所に保管します。
-          台帳には<strong>その「在りか」だけ</strong>を記しておくと、台帳と秘匿情報を分けて残せます。
+          台帳には<strong>その「在りか」だけ</strong>
+          を記しておくと、台帳と秘匿情報を分けて残せます。
         </p>
         <p className="text-xs text-slate-500">
           パスコードやパスワードを変更したときは、保管した控えの更新も忘れずに行ってください。
@@ -204,38 +205,7 @@ export default function GuidePage() {
           を記しておくと、家族が手続きにたどり着けます。
         </p>
       </Card>
-      <Card title="⑦ 亡くなった後に用意することが多い書類">
-        <p>手続き先によって異なりますが、一般的によく求められる書類です。</p>
-        <ul className="list-disc space-y-1 pl-5">
-          <li>
-            <strong>死亡診断書 / 死亡届</strong>
-            （コピーを複数用意すると便利）
-          </li>
-          <li>
-            <strong>戸籍謄本</strong>
-            （被相続人の出生から死亡までの連続したもの／相続人の戸籍）
-          </li>
-          <li>
-            <strong>法定相続情報一覧図</strong>
-            （法務局で取得。提出が一枚で済み便利）
-          </li>
-          <li>
-            <strong>遺言書</strong>
-            （ある場合。自筆証書は検認が必要なことがあります）
-          </li>
-          <li>
-            <strong>相続人の本人確認書類・印鑑証明書</strong>
-            、遺産分割協議書（必要に応じて）
-          </li>
-          <li>
-            金融機関・保険会社の<strong>所定の請求書類</strong>
-            （各社の窓口で案内されます）
-          </li>
-        </ul>
-        <p className="text-xs text-slate-500">
-          相続放棄には原則3か月の期限があります。債務が多い可能性がある場合は早めに専門家へ。
-        </p>
-      </Card>
+
       <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
         ここに書かれているのは一般的な参考情報です。最新情報は公的機関や専門家でご確認ください。免責事項は{" "}
         <Link href="/manual" className="font-semibold underline">
