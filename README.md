@@ -6,7 +6,6 @@
 
 **公開サイト: https://kurashinodaicho.com**
 
-> 設計原則・仕様の詳細は [`BUILD_INSTRUCTION.md`](./BUILD_INSTRUCTION.md) を参照。
 > 使い方・スコープはアプリ内の `/manual` と `/guide` に記載。
 
 ## ハードルール
@@ -39,3 +38,7 @@ npm run build    # 静的エクスポート → out/
 ```
 
 `npm run build` で `out/` に静的サイトが生成されます。Vercel 等にそのままデプロイできます。
+
+## ライセンス
+
+[MIT License](./LICENSE)

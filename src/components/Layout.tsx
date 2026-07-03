@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useSyncExternalStore } from "react";
+import { FaGithub } from "react-icons/fa";
 import { getDirtyFlag, subscribeDirty } from "@/lib/dirtyStore";
 import { hydrateDirty } from "@/lib/db";
 
@@ -59,9 +60,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 暮らしの契約を、ひとつの台帳に
               </span>
             </Link>
-            <span className="text-xs text-slate-400">
-              ログイン不要・データは端末内のみ
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-slate-400">
+                ログイン不要・データは端末内のみ
+              </span>
+              <a
+                href="https://github.com/uzura89/kurashino-daicho"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub リポジトリ（ソースコード）"
+                title="ソースコード（GitHub）"
+                className="text-slate-400 hover:text-ink"
+              >
+                <FaGithub className="h-5 w-5" />
+              </a>
+            </div>
           </div>
           {/* モバイル/タブレット: 従来どおり上部の横並びナビ */}
           <nav className="-mb-px flex flex-wrap gap-x-1 gap-y-1 pb-2 text-sm lg:hidden">
