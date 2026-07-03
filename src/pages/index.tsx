@@ -18,6 +18,7 @@ import {
   LuNotebookPen,
 } from "react-icons/lu";
 import { RECORD_TYPES } from "@/lib/schema";
+import LedgerSampleIllustration from "@/components/LedgerSampleIllustration";
 
 const RECORD_TYPE_ICONS: Record<string, IconType> = {
   bank_account: LuLandmark,
@@ -40,32 +41,32 @@ const RECORD_TYPE_ICONS: Record<string, IconType> = {
 function FlowStep({
   n,
   title,
-  href,
-  cta,
+  // href,
+  // cta,
   children,
 }: {
   n: number;
   title: string;
-  href: string;
-  cta: string;
+  // href: string;
+  // cta: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex gap-3">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-800 text-sm font-semibold text-white">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white">
         {n}
       </div>
       <div className="min-w-0 flex-1">
-        <h3 className="font-semibold text-slate-800">{title}</h3>
+        <h3 className="font-medium text-ink">{title}</h3>
         <p className="mt-1 text-sm leading-relaxed text-slate-600">
           {children}
         </p>
-        <Link
+        {/* <Link
           href={href}
           className="mt-2 inline-block text-sm font-semibold text-slate-700 underline"
         >
           {cta} →
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
@@ -74,7 +75,7 @@ function FlowStep({
 export default function Home() {
   return (
     <div className="space-y-6">
-      <h1 className="font-brand text-2xl font-bold tracking-wide text-slate-800">
+      <h1 className="page-title leading-snug sm:text-3xl">
         銀行、保険、カード、サブスク。
         <br />
         散らかりがちな契約情報を、ひとつの台帳に。
@@ -82,11 +83,58 @@ export default function Home() {
       <p className="-mt-2 text-sm leading-relaxed text-slate-600">
         引っ越しにも、入院にも、もしもの時にも。暮らしの契約を、自分や家族が分かる形に。
       </p>
+
+      <section className="card space-y-5">
+        <h2 className="card-title">使い方（3ステップ）</h2>
+
+        <FlowStep
+          n={1}
+          title="明細取込（任意・スキップ可）"
+          // href="/import"
+          // cta="明細取込を開く"
+        >
+          カード明細のCSVを取り込み、定期課金（サブスク）の候補を抽出します。
+        </FlowStep>
+
+        <FlowStep
+          n={2}
+          title="台帳作成"
+          // href="/ledger"
+          // cta="台帳を作成する"
+        >
+          その他のカテゴリ（銀行・保険・負債等）の項目を手入力します。
+        </FlowStep>
+
+        <FlowStep
+          n={3}
+          title="書き出し（印刷して保管）"
+          // href="/export"
+          // cta="書き出しへ"
+        >
+          台帳をPDF/CSVに書き出し、PDFを印刷して完了です。
+        </FlowStep>
+
+        <div className="flex flex-col gap-2 pt-1 sm:flex-row">
+          <Link
+            href="/import"
+            className="btn-primary inline-flex w-full justify-center sm:w-auto"
+          >
+            ① 明細取込から始める →
+          </Link>
+          <Link
+            href="/ledger"
+            className="btn-secondary inline-flex w-full justify-center sm:w-auto"
+          >
+            ② 台帳作成から始める →
+          </Link>
+        </div>
+      </section>
+
       <section className="card">
-        <p className="mt-1 font-brand text-lg text-slate-800 font-bold">
-          暮らしの台帳とは
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        <h2 className="card-title">暮らしの台帳とは</h2>
+        {/* モバイルではカードの padding(p-5) を打ち消して幅いっぱいに表示する */}
+        <LedgerSampleIllustration className="-mx-5 mt-4 w-[calc(100%+2.5rem)] max-w-none sm:mx-auto sm:w-full sm:max-w-3xl" />
+        <p className="mt-3 text-sm leading-relaxed text-slate-600">
           自分や家族の<strong>契約・資産</strong>
           （銀行・カード・サブスク・保険・年金・不動産・アカウントなど）を一覧にまとめ、
           <strong>印刷して残しておく</strong>ための小さなツールです。
@@ -111,52 +159,9 @@ export default function Home() {
         </ul>
       </section>
 
-      <section className="card space-y-5">
-        <h2 className="text-lg font-semibold text-slate-800">
-          使い方（3ステップ）
-        </h2>
-
-        <FlowStep
-          n={1}
-          title="明細取込（任意・スキップ可）"
-          href="/import"
-          cta="明細取込を開く"
-        >
-          カード明細のCSVを取り込み、定期課金（サブスク）の候補を抽出します。台帳づくりを楽にするための
-          下準備で、<strong>使わなくても構いません</strong>。
-        </FlowStep>
-
-        <FlowStep n={2} title="台帳作成" href="/ledger" cta="台帳を作成する">
-          各カテゴリの必須項目を入力します。当てはまらないカテゴリは「該当なし」を選べばOKです。
-          入力は自動で下書き保存されます。
-        </FlowStep>
-
-        <FlowStep
-          n={3}
-          title="書き出し（印刷して保管）"
-          href="/export"
-          cta="書き出しへ"
-        >
-          台帳をPDF/CSVに書き出します。
-          <strong>PDFを印刷して金庫や封筒に物理保管</strong>すれば完成です。
-          CSVは次回の再編集用に保管します。
-        </FlowStep>
-
-        <div className="pt-1">
-          <Link
-            href="/import"
-            className="btn-primary inline-flex w-full justify-center sm:w-auto"
-          >
-            明細取込から始める →
-          </Link>
-        </div>
-      </section>
-
       <section className="card space-y-4">
         <div>
-          <h2 className="text-lg font-semibold text-slate-800">
-            台帳に含まれる項目の一覧
-          </h2>
+          <h2 className="card-title">台帳に含まれる項目の一覧</h2>
           <p className="mt-1 text-sm text-slate-600">
             次の{RECORD_TYPES.length}
             カテゴリの「どこに何があるか」を一覧化できます。
@@ -172,7 +177,7 @@ export default function Home() {
                   className="mt-0.5 h-5 w-5 shrink-0 text-slate-400"
                 />
                 <div className="min-w-0">
-                  <p className="font-semibold text-slate-800">{t.label}</p>
+                  <p className="font-medium text-ink">{t.label}</p>
                   <p className="text-xs leading-relaxed text-slate-500">
                     {t.fields.map((f) => f.label).join("・")}
                   </p>

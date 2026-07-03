@@ -119,7 +119,7 @@ export default function SettingsPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="text-xl font-bold text-slate-800">設定</h1>
+        <h1 className="page-title">設定</h1>
         <p className="mt-1 text-sm text-slate-600">
           この端末に保存された下書きデータの管理を行います。データはこの端末のブラウザ内（IndexedDB）にのみ保存されています。
         </p>
@@ -132,7 +132,7 @@ export default function SettingsPage() {
       )}
 
       <section className="card space-y-3">
-        <h2 className="font-semibold text-slate-800">データの状況</h2>
+        <h2 className="card-title">データの状況</h2>
         <div>
           <div className="mb-1 flex items-baseline justify-between text-sm text-slate-600">
             <span>入力の進捗（カテゴリ）</span>
@@ -171,9 +171,7 @@ export default function SettingsPage() {
 
       <section className="card space-y-3">
         <div>
-          <h2 className="font-semibold text-slate-800">
-            CSVを読み戻す（再編集用）
-          </h2>
+          <h2 className="card-title">CSVを読み戻す（再編集用）</h2>
           <p className="mt-1 text-sm text-slate-600">
             このアプリで書き出した<strong>CSV</strong>
             を読み込み、編集を再開できます。

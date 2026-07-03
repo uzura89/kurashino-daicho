@@ -9,7 +9,7 @@ function Card({
 }) {
   return (
     <section className="card space-y-3">
-      <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
+      <h2 className="card-title">{title}</h2>
       <div className="space-y-2 text-sm leading-relaxed text-slate-600">
         {children}
       </div>
@@ -20,7 +20,7 @@ function Card({
 function Term({ name, children }: { name: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="font-medium text-slate-800">{name}</h3>
+      <h3 className="font-medium text-ink">{name}</h3>
       <p className="mt-0.5 text-sm leading-relaxed text-slate-600">
         {children}
       </p>
@@ -32,9 +32,7 @@ export default function GuidePage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="text-xl font-bold text-slate-800">
-          基本情報（知っておきたいこと）
-        </h1>
+        <h1 className="page-title">基本情報（知っておきたいこと）</h1>
         <p className="mt-1 text-sm text-slate-600">
           台帳作成の範囲を少し超えますが、備えとして知っておきたいことをまとめました。
           <strong>

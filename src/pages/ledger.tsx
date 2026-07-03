@@ -15,7 +15,7 @@ import type { LedgerRecord } from "@/lib/types";
 type ItemsByType = Record<string, LedgerRecord[]>;
 
 // カテゴリの折りたたみ状態の localStorage キー接頭辞（UI設定。下書きの dirty には含めない）
-const COLLAPSE_PREFIX = 'ledger.collapsed.';
+const COLLAPSE_PREFIX = "ledger.collapsed.";
 
 export default function LedgerPage() {
   const [itemsByType, setItemsByType] = useState<ItemsByType>({});
@@ -50,7 +50,7 @@ export default function LedgerPage() {
     const map: Record<string, boolean> = {};
     try {
       for (const t of RECORD_TYPES) {
-        map[t.type] = localStorage.getItem(COLLAPSE_PREFIX + t.type) === '1';
+        map[t.type] = localStorage.getItem(COLLAPSE_PREFIX + t.type) === "1";
       }
     } catch {
       /* localStorage 不可なら全展開のまま */
@@ -60,7 +60,7 @@ export default function LedgerPage() {
 
   const persistCollapse = (type: string, value: boolean) => {
     try {
-      localStorage.setItem(COLLAPSE_PREFIX + type, value ? '1' : '0');
+      localStorage.setItem(COLLAPSE_PREFIX + type, value ? "1" : "0");
     } catch {
       /* 保存できなくても表示は切り替える */
     }
@@ -165,20 +165,19 @@ export default function LedgerPage() {
     <div className="space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-800">台帳作成</h1>
+          <h1 className="page-title">台帳作成</h1>
           <p className="mt-1 text-sm text-slate-600">
             各カテゴリの<span className="text-red-500">*</span>
             （必須）を入力するか「該当なし」を選んでください。
             必須以外の項目は空欄でも構いません。
-            パスワード等の秘匿情報は台帳に保存しません（必要なら別途共有してください）。
             入力は自動的に下書き保存されます。
           </p>
         </div>
         <div className="text-right text-xs text-slate-400">
           {savedAt ? "下書きに保存しました" : "　"}
           <div className="mt-1">
-            <Link href="/export" className="underline">
-              書き出して保存（正本）→
+            <Link href="/export" className="btn-secondary">
+              書き出しに進む →
             </Link>
           </div>
         </div>
@@ -207,10 +206,18 @@ export default function LedgerPage() {
       )}
 
       <div className="flex justify-end gap-2">
-        <button type="button" className="btn-secondary text-xs" onClick={() => setAllCollapsed(false)}>
+        <button
+          type="button"
+          className="btn-secondary text-xs"
+          onClick={() => setAllCollapsed(false)}
+        >
           すべて展開
         </button>
-        <button type="button" className="btn-secondary text-xs" onClick={() => setAllCollapsed(true)}>
+        <button
+          type="button"
+          className="btn-secondary text-xs"
+          onClick={() => setAllCollapsed(true)}
+        >
           すべて最小化
         </button>
       </div>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Papa from "papaparse";
 import { readTextFileSmart } from "@/lib/download";
@@ -170,6 +170,8 @@ export default function ImportPage() {
   const [linkedCard, setLinkedCard] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState(0);
+  const [dragOver, setDragOver] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   // 表示・列マッピング用に全ファイルの行を結合したもの
   const rows = useMemo(() => files.flatMap((f) => f.rows), [files]);
@@ -298,22 +300,22 @@ export default function ImportPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="text-xl font-bold text-slate-800">
+        <h1 className="page-title">
           カード明細からサブスク（定期課金）を取り込む
         </h1>
         <p className="mt-1 text-sm text-slate-600">
           明細を店舗・サービス別にまとめます。どれをサブスクとして取り込むかは一覧から目視で選べます。
           解析は<strong>すべてこのブラウザ内</strong>
           で行います。明細データは外部に送信されません（LLM・外部APIも不使用）。
-          文字コードは UTF-8 / Shift_JIS を自動判定します。
         </p>
         <div className="mt-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-          このステップは<strong>任意（スキップ可）</strong>
-          です。台帳づくりを楽にするための下準備なので、使わずに{" "}
-          <Link href="/ledger" className="font-semibold underline">
-            台帳作成
-          </Link>{" "}
-          へ直接進んでも構いません。
+          <p>
+            このステップは<strong>任意（スキップ可）</strong>
+            です。台帳づくりを楽にするための下準備なので、使わなくても構いません。
+          </p>
+          <Link href="/ledger" className="btn-secondary mt-2">
+            スキップして台帳作成へ進む →
+          </Link>
         </div>
       </header>
 
@@ -326,9 +328,52 @@ export default function ImportPage() {
       <section className="card space-y-3">
         <p className="label">1. カード明細CSVをアップロード</p>
         <p className="text-xs text-slate-500">
+          カード明細のCSVは、各カード会社の会員サイト（ホームページ）の「ご利用明細」ページからダウンロードできます。
           複数ファイルをまとめて選択できます（1ヶ月ずつの明細などを12ファイル一度に取り込めます）。追加でファイルを選ぶと前のファイルに加算されます。
         </p>
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="カード明細CSVを選択またはドラッグ＆ドロップ"
+          onClick={() => fileRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              fileRef.current?.click();
+            }
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragOver(true);
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            const fs = Array.from(e.dataTransfer.files).filter(
+              (f) => /\.csv$/i.test(f.name) || f.type === "text/csv",
+            );
+            if (fs.length) onFiles(fs);
+            else setError("CSVファイルをドロップしてください。");
+          }}
+          className={`cursor-pointer rounded-lg border-2 border-dashed px-4 py-8 text-center transition-colors ${
+            dragOver
+              ? "border-ink bg-slate-100"
+              : "border-slate-300 bg-slate-50/60 hover:border-slate-400 hover:bg-slate-50"
+          }`}
+        >
+          {/* 子要素上で dragleave が発火してちらつかないように pointer-events を切る */}
+          <div className="pointer-events-none space-y-1">
+            <p className="text-sm font-medium text-slate-700">
+              ここにCSVファイルをドラッグ＆ドロップ
+            </p>
+            <p className="text-xs text-slate-500">
+              またはクリックしてファイルを選択（複数可）
+            </p>
+          </div>
+        </div>
         <input
+          ref={fileRef}
           type="file"
           accept=".csv,text/csv"
           multiple
@@ -338,7 +383,7 @@ export default function ImportPage() {
             // 同じファイルを選び直したり追加で選べるように値をリセット
             e.target.value = "";
           }}
-          className="block text-sm text-slate-600 file:mr-3 file:rounded-md file:border file:border-slate-300 file:bg-white file:px-3 file:py-1.5 file:text-sm"
+          className="hidden"
         />
         {files.length > 0 && (
           <div className="space-y-2">

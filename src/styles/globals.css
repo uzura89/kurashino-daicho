@@ -6,12 +6,24 @@
   color-scheme: light;
 }
 
+/* ページの高さ次第でスクロールバーが出たり消えたりすると、
+   中央寄せレイアウト全体が横にズレてカクつく。常にバー分の幅を確保して防ぐ。 */
+html {
+  overflow-y: scroll;
+}
+@supports (scrollbar-gutter: stable) {
+  html {
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  background: #f6f7f9;
-  color: #1f2933;
+  background: #f7f8fa;
+  color: #333d52;
   font-family:
     -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
     "Hiragino Sans", Meiryo, sans-serif;
@@ -31,7 +43,7 @@ a {
     @apply inline-flex items-center justify-center gap-1 rounded-md px-4 py-2 text-sm font-medium transition-colors;
   }
   .btn-primary {
-    @apply btn bg-slate-800 text-white hover:bg-slate-700 disabled:opacity-40;
+    @apply btn bg-ink text-white hover:bg-ink/90 disabled:opacity-40;
   }
   .btn-secondary {
     @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40;
@@ -40,11 +52,22 @@ a {
     @apply btn border border-red-300 bg-white text-red-600 hover:bg-red-50;
   }
   .card {
-    @apply rounded-lg border border-slate-200 bg-white p-5 shadow-sm;
+    /* 一枚の紙のように：淡い罫、柔らかい影 */
+    @apply rounded-xl border border-slate-200/70 bg-white p-5 shadow-paper;
+  }
+  /* ページ見出し：OGPと同じ明朝・濃紺 */
+  .page-title {
+    @apply font-brand text-2xl font-normal tracking-wider text-ink;
+    /* BIZ UDPMincho に中間ウェイトがないため、僅かに肉付けして「やや太め」にする */
+    -webkit-text-stroke: 0.35px currentColor;
+  }
+  /* カード見出し：明朝＋細い罫線（OGPの「契約一覧」の意匠） */
+  .card-title {
+    @apply border-b border-slate-300/70 pb-2 font-brand text-lg font-normal tracking-wider text-ink;
+    -webkit-text-stroke: 0.35px currentColor;
   }
   .input {
-    /* @apply w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-400; */
-    @apply w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-slate-400;
+    @apply w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-sm focus:border-ink/60 focus:outline-none focus:ring-1 focus:ring-slate-300;
   }
   .label {
     @apply mb-1 block text-sm font-medium text-slate-700;

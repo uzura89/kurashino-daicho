@@ -9,7 +9,7 @@ function Section({
 }) {
   return (
     <section className="card space-y-3">
-      <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
+      <h2 className="card-title">{title}</h2>
       <div className="space-y-2 text-sm leading-relaxed text-slate-600">
         {children}
       </div>
@@ -21,7 +21,7 @@ export default function ManualPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="text-xl font-bold text-slate-800">説明書</h1>
+        <h1 className="page-title">説明書</h1>
         <p className="mt-1 text-sm text-slate-600">
           「はじめに」で触れていない、仕様・データの扱い・セキュリティ・免責事項の詳細です。
         </p>

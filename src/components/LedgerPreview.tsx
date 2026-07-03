@@ -11,8 +11,8 @@ export default function LedgerPreview({ records }: { records: LedgerRecord[] }) 
   if (sections.length === 0) return null;
 
   return (
-    <article className="mx-auto max-w-3xl rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-10 print:max-w-none print:border-0 print:p-0 print:shadow-none">
-      <h2 className="font-brand text-2xl font-bold text-slate-900">
+    <article className="mx-auto max-w-3xl rounded-xl border border-slate-200/70 bg-white p-6 shadow-paper sm:p-10 print:max-w-none print:border-0 print:p-0 print:shadow-none">
+      <h2 className="font-brand text-2xl tracking-wider text-ink">
         {DOC_TITLE}
       </h2>
       <p className="mt-1 text-xs text-slate-500">
@@ -22,7 +22,7 @@ export default function LedgerPreview({ records }: { records: LedgerRecord[] }) 
       <div className="mt-6 space-y-7">
         {sections.map((section) => (
           <section key={section.type} className="break-inside-avoid">
-            <h3 className="border-b-2 border-slate-300 pb-1 text-base font-bold text-slate-800">
+            <h3 className="border-b border-slate-400 pb-1 font-brand text-base tracking-wider text-ink">
               {section.label}
             </h3>
 

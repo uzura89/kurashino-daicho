@@ -63,9 +63,7 @@ export default function ExportPage() {
   return (
     <div className="space-y-5">
       <header>
-        <h1 className="text-xl font-bold text-slate-800">
-          書き出し（エクスポート）
-        </h1>
+        <h1 className="page-title">書き出し（エクスポート）</h1>
         <p className="mt-1 text-sm text-slate-600">
           台帳を1つのファイルに書き出します。書き出したファイルが
           <strong>正本</strong>になります。
@@ -92,7 +90,7 @@ export default function ExportPage() {
 
       <section className="card space-y-3">
         <div>
-          <h2 className="font-semibold text-slate-800">台帳を書き出す</h2>
+          <h2 className="card-title">台帳を書き出す</h2>
           <p className="mt-1 text-sm text-slate-600">
             「どこに何があるか」の地図情報です。
             <strong>PDFは印刷して物理保管</strong>、
@@ -121,7 +119,9 @@ export default function ExportPage() {
       {!empty && (
         <section className="space-y-3">
           <div className="print:hidden">
-            <h2 className="text-lg font-bold text-slate-800">プレビュー</h2>
+            <h2 className="font-brand text-lg tracking-wider text-ink">
+              プレビュー
+            </h2>
             <p className="mt-1 text-sm text-slate-600">
               書き出し（PDF/印刷）の内容を確認できます。値の入った項目だけを表示します。
             </p>
