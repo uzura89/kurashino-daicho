@@ -144,10 +144,9 @@ export default function Home() {
         <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600">
           <li>
             <strong>データはこの端末のブラウザ内だけ</strong>
-            に保存され、サーバーや外部APIには送られません。ログイン不要。 ただし
-            <strong>ブラウザの履歴・データを消すと内容も消えます</strong>。
-            確実に残すには<strong>CSVに書き出して保存</strong>してください。
+            に保存され、サーバーや外部APIには送られません。
           </li>
+
           <li>
             <strong>正本は「印刷した紙（PDF）」</strong>
             です。アプリの保存は下書きにすぎません。書き出して印刷・保管して完成です。
@@ -155,6 +154,11 @@ export default function Home() {
           <li>
             パスワード等の<strong>秘匿情報は台帳に保存しません</strong>
             。台帳は「地図」として「どこに何があるか」を示すことが目的です。
+          </li>
+          <li>
+            秘匿情報は保存しない前提ですが、念のため、
+            <strong>データ書き出しの後はブラウザデータの削除を推奨</strong>
+            します（ワンクリックで削除可能）。
           </li>
         </ul>
       </section>
