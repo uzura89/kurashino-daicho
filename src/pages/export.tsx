@@ -121,7 +121,7 @@ export default function ExportPage() {
           >
             {busy === "export"
               ? "書き出し中…"
-              : "ファイルに書き出し（PDF＆CSV）"}
+              : "ファイルに書き出し（PDF+CSV）"}
           </button>
           <p className="mt-2 text-xs text-slate-500">
             PDFとCSVの2つのファイルをダウンロードします。ブラウザが「複数ファイルのダウンロード」の許可を求めた場合は許可してください。
