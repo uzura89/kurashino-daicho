@@ -29,17 +29,8 @@ export default function Document() {
           sizes="180x180"
           href="/favicons/apple-touch-icon.png"
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=BIZ+UDPMincho:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-        {/* §11: 台帳内容を捕捉するアナリティクスや third-party スクリプトは入れない */}
+        {/* §11: アナリティクス・third-party スクリプト・外部CDNは一切入れない。
+            Webフォント（BIZ UDPMincho）もセルフホスト（src/styles/fonts.css）。 */}
       </Head>
       <body>
         <Main />

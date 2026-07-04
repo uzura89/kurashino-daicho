@@ -120,3 +120,22 @@ export async function wipeAll(): Promise<void> {
   await db.clear('records');
   await db.clear('kv');
 }
+
+// CategoryEditor の折りたたみ状態（localStorage）のキー接頭辞。ledger / settings と共有。
+export const COLLAPSE_PREFIX = 'ledger.collapsed.';
+
+/**
+ * この端末の下書きデータ一式を削除する
+ * （IndexedDB の全レコード・kv、localStorage の折りたたみ状態）。
+ */
+export async function wipeAllLocalData(): Promise<void> {
+  await wipeAll();
+  await clearDirty();
+  try {
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith(COLLAPSE_PREFIX))
+      .forEach((k) => localStorage.removeItem(k));
+  } catch {
+    /* localStorage 不可の環境では何もしない */
+  }
+}

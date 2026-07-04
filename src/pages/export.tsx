@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { track } from "@vercel/analytics";
-import { getAllRecords, clearDirty } from "@/lib/db";
+import { getAllRecords, clearDirty, wipeAllLocalData } from "@/lib/db";
 import { recordsToCsv } from "@/lib/csv";
 import { downloadText, downloadBytes, stampFromDate } from "@/lib/download";
 import LedgerPreview from "@/components/LedgerPreview";
@@ -12,6 +11,8 @@ export default function ExportPage() {
   const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  // CSV書き出し直後に「下書きを端末に残さない」選択を促すダイアログ（§11）
+  const [askWipe, setAskWipe] = useState(false);
 
   const reload = () =>
     getAllRecords().then((r) => {
@@ -25,38 +26,49 @@ export default function ExportPage() {
 
   const stamp = () => stampFromDate(new Date());
 
-  const exportCsv = async () => {
-    setBusy("csv");
+  // PDF（印刷・共有用）と CSV（再編集用の正本）を1回の操作でまとめて書き出す。
+  // CSV の保存忘れ＝下書き消失時のデータ喪失を防ぐため、ボタンは分けない。
+  const exportAll = async () => {
+    setBusy("export");
+    setMessage(null);
     try {
-      const csv = recordsToCsv(records);
-      downloadText(`shukatsu_${stamp()}.csv`, csv);
-      track("export_csv", { records: records.length });
+      let pdfError: string | null = null;
+      let pdfBytes: Uint8Array | null = null;
+      try {
+        // pdf-lib は重いので、書き出し時のみ遅延読み込みする
+        const { generatePdf } = await import("@/lib/pdf");
+        pdfBytes = await generatePdf(records, { title: "資産・契約台帳" });
+      } catch (e) {
+        pdfError = e instanceof Error ? e.message : String(e);
+      }
+      const s = stamp();
+      if (pdfBytes) {
+        downloadBytes(`daicho_${s}.pdf`, pdfBytes, "application/pdf");
+      }
+      // PDF 生成に失敗しても、正本である CSV は必ず書き出す
+      downloadText(`daicho_${s}.csv`, recordsToCsv(records));
       await clearDirty();
       setMessage(
-        "CSVを書き出しました。再編集用の正本です。印刷物と一緒に物理保管してください。",
+        pdfError
+          ? `CSVは書き出しましたが、PDFの生成に失敗しました: ${pdfError}`
+          : "PDFとCSVを書き出しました。PDFは印刷して物理保管、CSVは再編集用の正本です。",
       );
+      setAskWipe(true);
     } finally {
       setBusy(null);
     }
   };
 
-  const exportPdf = async () => {
-    setBusy("pdf");
-    setMessage(null);
+  const wipeAfterExport = async () => {
+    setBusy("wipe");
     try {
-      // pdf-lib は重いので、PDF書き出し時のみ遅延読み込みする
-      const { generatePdf } = await import("@/lib/pdf");
-      const bytes = await generatePdf(records, { title: "資産・契約台帳" });
-      downloadBytes(`shukatsu_${stamp()}.pdf`, bytes, "application/pdf");
-      track("export_pdf", { records: records.length });
-      await clearDirty();
-      setMessage("PDFを書き出しました。");
-    } catch (e) {
+      await wipeAllLocalData();
+      await reload();
       setMessage(
-        "PDF生成に失敗しました: " +
-          (e instanceof Error ? e.message : String(e)),
+        "ファイルを書き出し、この端末の下書きをすべて削除しました。編集を再開するには、設定の「CSVを読み戻す」で書き出したCSVを読み込んでください。",
       );
     } finally {
+      setAskWipe(false);
       setBusy(null);
     }
   };
@@ -101,21 +113,19 @@ export default function ExportPage() {
             （パスワード等は含まれないため）。
           </p>
         </div>
-        <div className="flex gap-2">
+        <div>
           <button
             className="btn-primary"
             disabled={!!busy || empty}
-            onClick={() => exportPdf()}
+            onClick={() => exportAll()}
           >
-            {busy === "pdf" ? "生成中…" : "PDF"}
+            {busy === "export"
+              ? "書き出し中…"
+              : "ファイルに書き出し（PDF＆CSV）"}
           </button>
-          <button
-            className="btn-secondary"
-            disabled={!!busy || empty}
-            onClick={() => exportCsv()}
-          >
-            {busy === "csv" ? "書き出し中…" : "CSV"}
-          </button>
+          <p className="mt-2 text-xs text-slate-500">
+            PDFとCSVの2つのファイルをダウンロードします。ブラウザが「複数ファイルのダウンロード」の許可を求めた場合は許可してください。
+          </p>
         </div>
       </section>
 
@@ -148,6 +158,48 @@ export default function ExportPage() {
         </Link>{" "}
         の手順で印刷・物理保管し、保管場所と開け方を家族に伝えてください。
       </div>
+
+      {askWipe && (
+        <div
+          className="fixed inset-0 z-50 !mt-0 flex items-center justify-center bg-slate-900/50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="wipe-dialog-title"
+        >
+          <div className="w-full max-w-md space-y-3 rounded-lg bg-white p-5 shadow-xl">
+            <h2 id="wipe-dialog-title" className="card-title">
+              ファイルを書き出しました
+            </h2>
+            <p className="text-sm text-slate-600">
+              プライバシー保護のため、下書きをブラウザに長く残さないことをおすすめします。
+              いま書き出したCSVが正本なので、削除しても{" "}
+              <span className="font-semibold">設定の「CSVを読み戻す」</span>
+              でいつでも編集を再開できます。
+            </p>
+            <p className="text-sm text-slate-600">
+              この端末の下書きを今すぐ削除しますか？
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setAskWipe(false)}
+                disabled={busy === "wipe"}
+              >
+                残しておく
+              </button>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={wipeAfterExport}
+                disabled={busy === "wipe"}
+              >
+                {busy === "wipe" ? "削除中…" : "下書きを削除する（推奨）"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

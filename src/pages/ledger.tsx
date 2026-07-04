@@ -9,13 +9,11 @@ import {
   deleteRecord,
   getCategoryNotApplicable,
   setCategoryNotApplicable,
+  COLLAPSE_PREFIX,
 } from "@/lib/db";
 import type { LedgerRecord } from "@/lib/types";
 
 type ItemsByType = Record<string, LedgerRecord[]>;
-
-// カテゴリの折りたたみ状態の localStorage キー接頭辞（UI設定。下書きの dirty には含めない）
-const COLLAPSE_PREFIX = "ledger.collapsed.";
 
 export default function LedgerPage() {
   const [itemsByType, setItemsByType] = useState<ItemsByType>({});

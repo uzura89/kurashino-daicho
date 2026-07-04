@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   getAllRecords,
-  wipeAll,
-  clearDirty,
+  wipeAllLocalData,
   getCategoryNotApplicable,
   replaceAllRecords,
 } from "@/lib/db";
@@ -12,9 +11,6 @@ import { readTextFileSmart } from "@/lib/download";
 import { RECORD_TYPES } from "@/lib/schema";
 import { isCategoryComplete } from "@/lib/record";
 import type { LedgerRecord } from "@/lib/types";
-
-// CategoryEditor が使う折りたたみ状態の localStorage キー接頭辞
-const COLLAPSE_PREFIX = "ledger.collapsed.";
 
 type Stats = { records: number; resolved: number; total: number };
 
@@ -46,17 +42,6 @@ export default function SettingsPage() {
     reload();
   }, []);
 
-  const clearCollapseState = () => {
-    try {
-      const keys = Object.keys(localStorage).filter((k) =>
-        k.startsWith(COLLAPSE_PREFIX),
-      );
-      keys.forEach((k) => localStorage.removeItem(k));
-    } catch {
-      /* localStorage 不可の環境では何もしない */
-    }
-  };
-
   const clearAll = async () => {
     if (
       !confirm(
@@ -68,9 +53,7 @@ export default function SettingsPage() {
     setBusy(true);
     setMessage(null);
     try {
-      await wipeAll();
-      await clearDirty();
-      clearCollapseState();
+      await wipeAllLocalData();
       await reload();
       setMessage("下書きデータをすべて削除しました。");
     } finally {

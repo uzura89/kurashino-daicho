@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
-import { Analytics } from "@vercel/analytics/next";
+import "@/styles/fonts.css";
 import "@/styles/globals.css";
 
 const SITE_URL = "https://kurashinodaicho.com";
@@ -65,7 +65,6 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <Layout>
         <Component {...pageProps} />
-        <Analytics />
       </Layout>
     </>
   );
