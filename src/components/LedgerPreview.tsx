@@ -47,7 +47,7 @@ export default function LedgerPreview({ records }: { records: LedgerRecord[] }) 
                           <td
                             className={`whitespace-pre-wrap px-3 py-1.5 text-slate-800 ${
                               e.small ? "text-xs leading-relaxed" : "text-sm"
-                            }`}
+                            } ${e.blank ? "h-9" : ""}`}
                           >
                             {e.value}
                           </td>

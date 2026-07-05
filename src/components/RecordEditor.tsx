@@ -136,6 +136,7 @@ export default function RecordEditor({
                   rows={2}
                   value={fv.value}
                   disabled={disabled}
+                  placeholder={f.handwrite ? '印刷後に手書きでも記入できます' : undefined}
                   onChange={(e) => patchValue(f.key, { value: e.target.value })}
                 />
               ) : (
@@ -143,6 +144,7 @@ export default function RecordEditor({
                   className="input"
                   value={fv.value}
                   disabled={disabled}
+                  placeholder={f.handwrite ? '印刷後に手書きでも記入できます' : undefined}
                   onChange={(e) => patchValue(f.key, { value: e.target.value })}
                 />
               )}

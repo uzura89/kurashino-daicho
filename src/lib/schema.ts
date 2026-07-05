@@ -16,6 +16,13 @@ const fr = (
   width?: FieldWidth,
   options?: string[],
 ) => ({ key, label, width, options, required: true });
+// 手書き想定項目（任意入力。空欄でもPDF・プレビューに記入欄として出し、印刷後に手書きできる）
+const fh = (key: string, label: string, width?: FieldWidth) => ({
+  key,
+  label,
+  width,
+  handwrite: true,
+});
 
 export const RECORD_TYPES: RecordTypeDef[] = [
   {
@@ -79,7 +86,7 @@ export const RECORD_TYPES: RecordTypeDef[] = [
     type: "real_estate",
     label: "住まい",
     description:
-      "持ち家・賃貸どちらも、住まいに関する契約をまとめます。引っ越しや、家族が代わりに手続きする場面で必要になります。",
+      "持ち家・賃貸どちらも、住まいに関する契約をまとめます。引っ越しや、家族が代わりに手続きする場面で必要になります。所在地や名義は空欄のまま印刷し、手書きで記入することもできます。",
     fields: [
       fr("kind", "区分", "sm", [
         "持ち家（一戸建て）",
@@ -87,8 +94,8 @@ export const RECORD_TYPES: RecordTypeDef[] = [
         "賃貸",
         "その他",
       ]),
-      fr("location", "所在地", "full"),
-      fr("owner", "名義・契約者", "sm"),
+      fh("location", "所在地", "full"),
+      fh("owner", "名義・契約者", "sm"),
       f("manager", "管理会社・大家・管理組合", "md"),
       f("renewal", "契約期間・更新時期（賃貸 等）", "sm"),
       f(
@@ -238,8 +245,10 @@ export const RECORD_TYPES: RecordTypeDef[] = [
   {
     type: "contact",
     label: "連絡先・専門家",
+    description:
+      "家族が頼れる専門家・担当者を記録します。氏名や連絡先は空欄のまま印刷し、手書きで記入することもできます。",
     fields: [
-      f("category", "区分", "md", [
+      fr("category", "区分", "md", [
         "司法書士",
         "税理士",
         "弁護士",
@@ -250,8 +259,8 @@ export const RECORD_TYPES: RecordTypeDef[] = [
         "銀行担当",
         "その他",
       ]),
-      fr("name", "氏名・事務所", "md"),
-      fr("contact", "連絡先", "md"),
+      fh("name", "氏名・事務所", "md"),
+      fh("contact", "連絡先", "md"),
       f("memo", "メモ", "full"),
     ],
   },

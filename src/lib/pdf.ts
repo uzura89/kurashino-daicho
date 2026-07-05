@@ -4,7 +4,7 @@
 import { PDFDocument, PDFFont, PDFPage, rgb } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import type { LedgerRecord } from "./types";
-import { buildLedgerView, rowEntries } from "./ledgerView";
+import { buildLedgerView, rowEntries, type RowEntry } from "./ledgerView";
 
 const FONT_URL = "/fonts/NotoSansJP-Regular.ttf";
 const A4 = { width: 595.28, height: 841.89 };
@@ -23,6 +23,7 @@ const SM_LH = SM_SIZE + 2.5;
 
 const MEMO_LINES = 4; // カテゴリ末尾の自由記入欄の罫線本数
 const MEMO_LH = 18; // 記入欄の行間（手書き用に広め）
+const BLANK_ROWH = 24; // 空欄の手書き記入欄（handwrite項目）の行高
 
 let cachedFontBytes: ArrayBuffer | null = null;
 
@@ -125,9 +126,7 @@ export async function generatePdf(
   const sections = buildLedgerView(records);
 
   // 1アイテムを縦2列（ラベル／値）の表として描く。長文の値は小さめの文字で。
-  const drawCardItem = (
-    entries: { label: string; value: string; small: boolean }[],
-  ) => {
+  const drawCardItem = (entries: RowEntry[]) => {
     if (entries.length === 0) return;
     const valW = contentWidth - CARD_LABELW;
     const wrapped = entries.map((e) => {
@@ -138,10 +137,16 @@ export async function generatePdf(
         vl: wrapText(e.value, font, vs, valW - 8),
         vs,
         vlh,
+        blank: !!e.blank,
       };
     });
-    const rowH = wrapped.map(
-      (w) => Math.max(w.kl.length * CELL_LH, w.vl.length * w.vlh) + 4,
+    // 空の手書き記入欄は、書き込めるだけの高さを確保する
+    const rowH = wrapped.map((w) =>
+      Math.max(
+        w.kl.length * CELL_LH,
+        w.vl.length * w.vlh,
+        w.blank ? BLANK_ROWH : 0,
+      ) + 4,
     );
     const tableH = rowH.reduce((a, b) => a + b, 0);
     ensure(tableH + 10);

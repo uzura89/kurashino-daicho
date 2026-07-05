@@ -16,6 +16,8 @@ export interface FieldDef {
   required?: boolean;
   /** 指定すると自由入力ではなく選択式（プルダウン）になる。 */
   options?: string[];
+  /** 印刷後の手書き記入を想定する項目。空欄でもPDF・プレビューに記入欄として出す。 */
+  handwrite?: boolean;
 }
 
 export interface RecordTypeDef {
